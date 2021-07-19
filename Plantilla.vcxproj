@@ -146,6 +146,8 @@
     <ClInclude Include="Recursos.h" />
     <ClInclude Include="MiJuego.h" />
     <ClInclude Include="VariablesEntorno.h" />
+    <ClInclude Include="VistaItems.h" />
+    <ClInclude Include="VistaPersonajes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

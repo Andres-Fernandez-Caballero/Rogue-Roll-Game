@@ -32,5 +32,11 @@
     <ClInclude Include="VariablesEntorno.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VistaItems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VistaPersonajes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
