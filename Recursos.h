@@ -12,12 +12,11 @@
 
 using namespace std;
 
-
 namespace Recursos {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	void CambiarColor(int ForgC) {
+	void CambiarColor(int codigo_color) {
 
 		WORD wColor;
 
@@ -28,12 +27,13 @@ namespace Recursos {
 		if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
 		{
 			//Mask out all but the background attribute, and add in the forgournd  color 
-			wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+			wColor = (csbi.wAttributes & 0xF0) + (codigo_color & 0x0F);
 			SetConsoleTextAttribute(hStdOut, wColor);
 		}
 	}
 
-	void cls() {
+	//TODO: esta funcion no se usa
+	void cls() {   
 		HANDLE                     hStdOut;
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		DWORD                      count;
@@ -43,11 +43,11 @@ namespace Recursos {
 		hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (hStdOut == INVALID_HANDLE_VALUE) return;
 
-		/* Get the number of cells in the current buffer */
+		// Get the number of cells in the current buffer
 		if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
 		cellCount = csbi.dwSize.X * csbi.dwSize.Y;
 
-		/* Fill the entire buffer with spaces */
+		// Fill the entire buffer with spaces 
 		if (!FillConsoleOutputCharacter(
 			hStdOut,
 			(TCHAR)' ',
@@ -56,7 +56,7 @@ namespace Recursos {
 			&count
 		)) return;
 
-		/* Fill the entire buffer with the current colors and attributes */
+		// Fill the entire buffer with the current colors and attributes
 		if (!FillConsoleOutputAttribute(
 			hStdOut,
 			csbi.wAttributes,
@@ -65,12 +65,12 @@ namespace Recursos {
 			&count
 		)) return;
 
-		/* Move the cursor home */
+		// Move the cursor home
 		SetConsoleCursorPosition(hStdOut, homeCoords);
 	}
 
-	void CambiarCursor(bool estado)
-	{
+	//TODO: este metodo modifica la vista del cursor en la consola nombre alternativo "ocultarCursor" aparte solo se usa una vez en false
+	void CambiarCursor(bool estado) {
 		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		CONSOLE_CURSOR_INFO info;
 		info.dwSize = 100;
@@ -78,11 +78,14 @@ namespace Recursos {
 		SetConsoleCursorInfo(consoleHandle, &info);
 	}
 
+	//TODO: este metodo no se usa todavia
 	void CambiarSemilla() {
 		unsigned int seed = time(0);
 		srand(seed);
 	}
 
+
+	// TODO: este metodo no se usa, cambiar el nombre por uno mas coherente...
 	int Random_Int(int min, int max) {
 		int random = min + rand() % ((max + 1) - min);
 		return random;
