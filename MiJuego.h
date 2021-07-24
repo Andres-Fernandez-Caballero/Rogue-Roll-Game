@@ -1,22 +1,20 @@
 #pragma once
-#ifndef MIJUEGO
-#define MIJUEGO
+#ifndef MI_JUEGO_H
+#define MI_JUEGO_H
 
-/*
-* include
-*/
+
 #include "Recursos.h"
 #include "VariablesEntorno.h"
-const int FILAS = 27;
-const int COLUMNAS = 104;
-//const int IMAGEN_JUGADOR=
 
 
 using namespace Recursos;
 using namespace variablesEntorno;
 
-//funciones del juegos
+const int FILAS = 27;
+const int COLUMNAS = 104;
+
 namespace funcionesJuego {
+
 	char colision(Sprite& elemento, char escenario[FILAS][COLUMNAS]) {
 		return escenario[jugador.Y][jugador.X];
 	}
@@ -42,8 +40,6 @@ namespace funcionesJuego {
 		if (escenario[jugador.Y][jugador.X] == 'X' || escenario[jugador.Y][jugador.X] == 'P') {
 			validar = false;
 		}
-
-
 		return validar;
 	}
 
@@ -60,11 +56,10 @@ namespace funcionesJuego {
 		variablesEntorno::jugador.X += velX;
 		variablesEntorno::jugador.Y += velY;
 
-
-		// Barra de Posicion
+		//Barra de posicion
 		PosicionarXY(2, 20);
 		CambiarColor(7);
-		printf("Posicion\n*************\n*    X:%d\n*    Y:%d\n*************", jugador.X, jugador.Y);
+		printf("(%d,%d)", jugador.Y, jugador.X);
 
 		if (!ControlarPosicion(jugador, escenario)) {
 			jugador.X = auxX;
@@ -72,7 +67,7 @@ namespace funcionesJuego {
 		}
 	}
 
-	void Nivel1(string v[28]) {
+	void Nivel1(string v[28]) { //TODO: pasar el mapa a una libreria aparte
 		//61 ancho
 		//                111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999
 		//      01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -179,14 +174,13 @@ namespace funcionesJuego {
 			}
 		}
 	}
+
 	void MoverEnemigo(Sprite& enemigo, int desplazamientoenY, int direccion) {
 
 		PosicionarXY(enemigo.X, enemigo.Y); // j son columnas(X) e i son filas osea (Y)
 		CambiarColor(6);
 		printf("%c", 169);
 		CambiarColor(7);
-
-		//static int direccion;
 
 		int posYinicial = enemigo.Y;
 		if (enemigo.Y == posYinicial)
@@ -195,12 +189,15 @@ namespace funcionesJuego {
 			direccion = 1;
 		}
 	}
+
 	bool Administrador(char escenario[FILAS][COLUMNAS], Sprite jugador, Sprite& enemigo) {
 		//detectar colisiones
 			//mover objetos en pantalla
 		int valido = false;
 		char objeto = colision(jugador, escenario);
 		bool barraenergia = true;
+		
+		// TODO: Cambiar todos los if anidados por un switch
 		if (objeto == '1') {
 			barraenergia = false;
 		}
@@ -233,6 +230,5 @@ namespace funcionesJuego {
 		return valido;
 	}
 }
-
-#endif // !TATETI
+#endif // !MI_JUEGO_H
 
