@@ -24,6 +24,7 @@
     <ProjectGuid>{941fbb8f-d5bd-42e4-99be-9b4b42849f82}</ProjectGuid>
     <RootNamespace>Plantilla</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Rogue_Roll_Game</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

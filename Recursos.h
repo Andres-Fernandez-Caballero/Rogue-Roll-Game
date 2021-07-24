@@ -1,19 +1,19 @@
 #pragma once
 #ifndef RECURSOS
 #define RECURSOS
+
+
 #include <iostream>
 #include <time.h>
 #include <Windows.h>
 #include <conio.h>
 #include <stdio.h>
+
+
 using namespace std;
 
-/*
-	constantes
-	variables globales
-*/
-namespace Recursos
-{
+
+namespace Recursos {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -67,7 +67,6 @@ namespace Recursos
 
 		/* Move the cursor home */
 		SetConsoleCursorPosition(hStdOut, homeCoords);
-
 	}
 
 	void CambiarCursor(bool estado)
@@ -78,6 +77,7 @@ namespace Recursos
 		info.bVisible = estado;
 		SetConsoleCursorInfo(consoleHandle, &info);
 	}
+
 	void CambiarSemilla() {
 		unsigned int seed = time(0);
 		srand(seed);
@@ -99,20 +99,15 @@ namespace Recursos
 	}
 
 	int leerTecla() {
-
 		if (_kbhit()) {
 			char l= _getch();
 			int ascii = (int)l;
 			return ascii;
-			
 			/*
 			* 27 ESC
 			*/
-			
 		}
 	}
-
 }
-
 #endif // !RECURSOS
 

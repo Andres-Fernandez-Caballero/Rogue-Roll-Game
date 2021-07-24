@@ -2,30 +2,25 @@
 #ifndef JUEGO
 #define JUEGO
 
-/*
-	inlcude
-*/
+
 #include "Recursos.h"
 #include "MiJuego.h"
 #include "VariablesEntorno.h"
 
+
 using namespace Recursos;
 using namespace variablesEntorno;
 using namespace funcionesJuego;
-// loop
+
+
 namespace juego {
-	
-	
-	void Inicializar() {
-	
-		
-	}
+
 	void CargarRecursos(Sprite enemigo, Sprite &jugador, string v[28],char escenario[FILAS][COLUMNAS]) {
-		
 		funcionesJuego::Nivel1(v);
 		funcionesJuego::ConvertiraMatriz(v, escenario, jugador, enemigo);
 		int a = 0;
 	}
+
 	bool Actualizar(char escenario[FILAS][COLUMNAS]) {
 	
 		bool salir = false;
@@ -48,31 +43,22 @@ namespace juego {
 
 		}
 		//llamar Administrador
-		salir=MIJUEGO::Administrador(escenario, jugador, enemigo);
+		salir=MI_JUEGO_H::Administrador(escenario, jugador, enemigo);
 
 		return salir;
-		
 	}
+
 	void Dibujar(char escenario[FILAS][COLUMNAS],Sprite jugador) {
 	
 		CambiarCursor(false);
-		
-		
+			
 		PosicionarXY(jugador.X, jugador.Y);
 		CambiarColor(2);
 		printf("%c", jugador.icono);
-		
-	
 	}
-	void DescargarRecursos() {}
-	void Terminar() {}
-	void Jugar() {
-		
-		/*
-		* programar nuestro loop
-		*/
-		
-		string v[28];
+	
+	void Jugar() {	
+		string v[28]; //esto es el la prepreentancion del mapa arreglarlo
 		char escenario[FILAS][COLUMNAS];
 		
 		variablesEntorno::jugador.X = 10;
@@ -83,23 +69,16 @@ namespace juego {
 		variablesEntorno::enemigo.Y = 11;
 		variablesEntorno::enemigo.icono = 169;
 		
-
-
-		Inicializar();
 		CargarRecursos(enemigo, jugador, v, escenario);
-		
 				
 		bool salir = false;
 		funcionesJuego::DibujarEscenario(escenario);
+
 		do {
 			Dibujar(escenario, jugador);
 			salir=Actualizar(escenario);
 			variablesEntorno::cont += 1;
 		} while (!salir);
-		
-		DescargarRecursos();
-		Terminar();
 	}
-	
 }
 #endif // !"GAME"
