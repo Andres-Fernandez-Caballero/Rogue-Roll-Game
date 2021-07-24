@@ -14,7 +14,6 @@ const int COLUMNAS = 104;
 
 using namespace Recursos;
 using namespace variablesEntorno;
-
 //funciones del juegos
 namespace funcionesJuego {
 	char colision(Sprite& elemento, char escenario[FILAS][COLUMNAS]) {
@@ -61,10 +60,10 @@ namespace funcionesJuego {
 		variablesEntorno::jugador.Y += velY;
 
 
-		// Barra de Posicion
+		////para testear
 		PosicionarXY(2, 20);
 		CambiarColor(7);
-		printf("Posicion\n*************\n*    X:%d\n*    Y:%d\n*************", jugador.X, jugador.Y);
+		printf("(%d,%d)", jugador.Y, jugador.X);
 
 		if (!ControlarPosicion(jugador, escenario)) {
 			jugador.X = auxX;
@@ -233,6 +232,7 @@ namespace funcionesJuego {
 		return valido;
 	}
 }
+
 
 #endif // !TATETI
 
