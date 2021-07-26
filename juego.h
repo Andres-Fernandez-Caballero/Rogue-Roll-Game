@@ -3,19 +3,17 @@
 #define JUEGO
 
 
-#include "Recursos.h"
+#include "UI_Juego/Recursos.h"
 #include "MiJuego.h"
-#include "VariablesEntorno.h"
+#include "Modelos/Modelos.h"
 
 
-using namespace Recursos;
-using namespace variablesEntorno;
 using namespace funcionesJuego;
 
 
 namespace juego {
 
-	void CargarRecursos(Sprite enemigo, Sprite &jugador, string v[28],char escenario[FILAS][COLUMNAS]) {
+	void CargarRecursos(Personaje enemigo, Personaje &jugador, string v[28],char escenario[FILAS][COLUMNAS]) {
 		funcionesJuego::Nivel1(v);
 		funcionesJuego::ConvertiraMatriz(v, escenario, jugador, enemigo);
 		int a = 0;
@@ -26,7 +24,7 @@ namespace juego {
 		bool salir = false;
 		int tecla = 0;
 		
-		tecla = leerTecla();
+		tecla = teclado::leerTecla();
 		if (tecla != 0) {
 			if (tecla == 27) {
 				//controla la salida
@@ -48,12 +46,12 @@ namespace juego {
 		return salir;
 	}
 
-	void Dibujar(char escenario[FILAS][COLUMNAS],Sprite jugador) {
+	void Dibujar(char escenario[FILAS][COLUMNAS],Personaje jugador) {
 	
-		CambiarCursor(false);
+		pantalla::CambiarCursor(false);
 			
-		PosicionarXY(jugador.X, jugador.Y);
-		CambiarColor(2);
+		pantalla::PosicionarXY(jugador.X, jugador.Y);
+		pantalla::CambiarColor(2);
 		printf("%c", jugador.icono);
 	}
 	
@@ -61,13 +59,13 @@ namespace juego {
 		string v[28]; //esto es el la prepreentancion del mapa arreglarlo
 		char escenario[FILAS][COLUMNAS];
 		
-		variablesEntorno::jugador.X = 10;
-		variablesEntorno::jugador.Y = 10;
-		variablesEntorno::jugador.icono = 64;
+		jugador.X = 10;
+		jugador.Y = 10;
+		jugador.icono = 64;
 
-		variablesEntorno::enemigo.X = 45;
-		variablesEntorno::enemigo.Y = 11;
-		variablesEntorno::enemigo.icono = 169;
+		enemigo.X = 45;
+		enemigo.Y = 11;
+		enemigo.icono = 169;
 		
 		CargarRecursos(enemigo, jugador, v, escenario);
 				
@@ -77,7 +75,7 @@ namespace juego {
 		do {
 			Dibujar(escenario, jugador);
 			salir=Actualizar(escenario);
-			variablesEntorno::cont += 1;
+			cont += 1;
 		} while (!salir);
 	}
 }

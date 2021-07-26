@@ -144,9 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="juego.h" />
-    <ClInclude Include="Recursos.h" />
     <ClInclude Include="MiJuego.h" />
-    <ClInclude Include="VariablesEntorno.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

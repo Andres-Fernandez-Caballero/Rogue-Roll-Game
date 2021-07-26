@@ -12,12 +12,11 @@
 
 using namespace std;
 
-namespace Recursos {
+namespace pantalla {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	void CambiarColor(int codigo_color) {
-
 		WORD wColor;
 
 		HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -78,6 +77,40 @@ namespace Recursos {
 		SetConsoleCursorInfo(consoleHandle, &info);
 	}
 
+	void PosicionarXY(int col, int fila) {
+		COORD coord;
+		coord.X = col;
+		coord.Y = fila;
+		SetConsoleCursorPosition(
+			GetStdHandle(STD_OUTPUT_HANDLE),
+			coord
+		);
+	}	
+}
+
+namespace teclado {
+	
+	const int TECLA_A = 97;
+	const int TECLA_D = 100;
+	const int TECLA_W = 119;
+	const int TECLA_S = 115;
+	const int TECLA_LEFT = 75;
+	const int TECLA_RIGTH = 77;
+	const int TECLA_UP = 72;
+	const int TECLA_DOWN = 80;
+	const int TECLA_ESC = 27;
+
+
+	int leerTecla() {
+		if (_kbhit()) {
+			char l = _getch();
+			int ascii = (int)l;
+			return ascii;
+		}
+	}
+}
+
+namespace logica {
 	//TODO: este metodo no se usa todavia
 	void CambiarSemilla() {
 		unsigned int seed = time(0);
@@ -89,27 +122,6 @@ namespace Recursos {
 	int Random_Int(int min, int max) {
 		int random = min + rand() % ((max + 1) - min);
 		return random;
-	}
-
-	void PosicionarXY(int col, int fila) {
-		COORD coord;
-		coord.X = col;
-		coord.Y = fila;
-		SetConsoleCursorPosition(
-			GetStdHandle(STD_OUTPUT_HANDLE),
-			coord
-		);
-	}
-
-	int leerTecla() {
-		if (_kbhit()) {
-			char l= _getch();
-			int ascii = (int)l;
-			return ascii;
-			/*
-			* 27 ESC
-			*/
-		}
 	}
 }
 #endif // !RECURSOS

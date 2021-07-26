@@ -3,23 +3,19 @@
 #define MI_JUEGO_H
 
 
-#include "Recursos.h"
-#include "VariablesEntorno.h"
-
-
-using namespace Recursos;
-using namespace variablesEntorno;
+#include "UI_Juego/Recursos.h"
+#include "Modelos/Modelos.h"
 
 const int FILAS = 27;
 const int COLUMNAS = 104;
 
 namespace funcionesJuego {
 
-	char colision(Sprite& elemento, char escenario[FILAS][COLUMNAS]) {
+	char colision(Personaje& elemento, char escenario[FILAS][COLUMNAS]) {
 		return escenario[jugador.Y][jugador.X];
 	}
 	
-	bool ControlarPosicion(Sprite& jugador, char escenario[FILAS][COLUMNAS]) {
+	bool ControlarPosicion(Personaje& jugador, char escenario[FILAS][COLUMNAS]) {
 		bool validar = true;
 		/*if (jugador.X < 1) {
 			jugador.X = 1;
@@ -43,22 +39,22 @@ namespace funcionesJuego {
 		return validar;
 	}
 
-	void MoverJugador(Sprite& jugador, int velX, int velY, char escenario[FILAS][COLUMNAS]) {
+	void MoverJugador(Personaje& jugador, int velX, int velY, char escenario[FILAS][COLUMNAS]) {
 		//guardo la posicion temporal
 		int auxX = jugador.X;
 		int auxY = jugador.Y;
 
 		//borrar el anteropr				
-		PosicionarXY(jugador.X, jugador.Y);
+		pantalla::PosicionarXY(jugador.X, jugador.Y);
 		//printf("%c", 32);
-		CambiarColor(7);
+		pantalla::CambiarColor(7);
 		printf("%c", 61);
-		variablesEntorno::jugador.X += velX;
-		variablesEntorno::jugador.Y += velY;
+		jugador.X += velX;
+		jugador.Y += velY;
 
 		//Barra de posicion
-		PosicionarXY(2, 20);
-		CambiarColor(7);
+		pantalla::PosicionarXY(2, 20);
+		pantalla::CambiarColor(7);
 		printf("(%d,%d)", jugador.Y, jugador.X);
 
 		if (!ControlarPosicion(jugador, escenario)) {
@@ -102,7 +98,7 @@ namespace funcionesJuego {
 		//v[28] = "                                                                                                        ";
 	}
 
-	void ConvertiraMatriz(string v[28], char escenario[FILAS][COLUMNAS], Sprite& jugador, Sprite& enemigo) {
+	void ConvertiraMatriz(string v[28], char escenario[FILAS][COLUMNAS], Personaje& jugador, Personaje& enemigo) {
 
 		for (int i = 0; i < FILAS; i++) {
 			for (int j = 0; j < COLUMNAS; j++) {
@@ -121,49 +117,49 @@ namespace funcionesJuego {
 
 	void DibujarEscenario(char escenario[FILAS][COLUMNAS]) 
 	{
-		CambiarColor(7);
+		pantalla::CambiarColor(7);
 		for (int i = 0; i < FILAS; i++) {
 			for (int j = 0; j < COLUMNAS; j++) {
 				//comezamos a dibujar la pantalla
 				if ((int)escenario[i][j] == 'X') {
-					PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+					pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
 					printf("%c", 178);
 				}
 				else {
 					if ((int)escenario[i][j] == '?') {
-						PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+						pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
 						printf("%c", 176);
 					}
 					else {
 						if ((int)escenario[i][j] == '1') {
-							PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-							CambiarColor(3);
+							pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+							pantalla::CambiarColor(3);
 							printf("%c", 35);
-							CambiarColor(7);
+							pantalla::CambiarColor(7);
 						}
 						else {
 							if ((int)escenario[i][j] == '2') {
-								PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-								CambiarColor(3);
+								pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+								pantalla::CambiarColor(3);
 								printf("%c", 35);
-								CambiarColor(7);
+								pantalla::CambiarColor(7);
 							}
 							else {
 								if ((int)escenario[i][j] == 'P') {
-									PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-									CambiarColor(6);
+									pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+									pantalla::CambiarColor(6);
 									printf("%c", 178);
-									CambiarColor(7);
+									pantalla::CambiarColor(7);
 								}
 								else {
 									if ((int)escenario[i][j] == 'O') {
-										PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-										CambiarColor(6);
+										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+										pantalla::CambiarColor(6);
 										printf("%c", 169);
-										CambiarColor(7);
+										pantalla::CambiarColor(7);
 									}
 									else {
-										PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
 										printf("%c", 32);
 									}
 								}
@@ -175,12 +171,12 @@ namespace funcionesJuego {
 		}
 	}
 
-	void MoverEnemigo(Sprite& enemigo, int desplazamientoenY, int direccion) {
+	void MoverEnemigo(Personaje& enemigo, int desplazamientoenY, int direccion) {
 
-		PosicionarXY(enemigo.X, enemigo.Y); // j son columnas(X) e i son filas osea (Y)
-		CambiarColor(6);
+		pantalla::PosicionarXY(enemigo.X, enemigo.Y); // j son columnas(X) e i son filas osea (Y)
+		pantalla::CambiarColor(6);
 		printf("%c", 169);
-		CambiarColor(7);
+		pantalla::CambiarColor(7);
 
 		int posYinicial = enemigo.Y;
 		if (enemigo.Y == posYinicial)
@@ -190,7 +186,7 @@ namespace funcionesJuego {
 		}
 	}
 
-	bool Administrador(char escenario[FILAS][COLUMNAS], Sprite jugador, Sprite& enemigo) {
+	bool Administrador(char escenario[FILAS][COLUMNAS], Personaje jugador, Personaje& enemigo) {
 		//detectar colisiones
 			//mover objetos en pantalla
 		int valido = false;
@@ -202,28 +198,28 @@ namespace funcionesJuego {
 			barraenergia = false;
 		}
 		if (objeto == '2') {
-			PosicionarXY(jugador.X, jugador.Y);
+			pantalla::PosicionarXY(jugador.X, jugador.Y);
 			escenario[jugador.Y][jugador.X] = ' ';
 			escenario[2][61] = ' ';
-			PosicionarXY(61, 2); // j son columnas(X) e i son filas osea (Y)
-			CambiarColor(6);
+			pantalla::PosicionarXY(61, 2); // j son columnas(X) e i son filas osea (Y)
+			pantalla::CambiarColor(6);
 			printf("%c", 178);
-			CambiarColor(7);
+			pantalla::CambiarColor(7);
 		}
 		if (objeto == 'O') {
-			PosicionarXY(jugador.X, jugador.Y);
-			CambiarColor(6);
+			pantalla::PosicionarXY(jugador.X, jugador.Y);
+			pantalla::CambiarColor(6);
 			//printf("PUM");
-			CambiarColor(7);
+			pantalla::CambiarColor(7);
 		}
 		if (objeto == 'M') {
-			PosicionarXY(jugador.X, jugador.Y);
-			CambiarColor(6);
+			pantalla::PosicionarXY(jugador.X, jugador.Y);
+			pantalla::CambiarColor(6);
 			printf("Ganaste");
-			CambiarColor(7);
+			pantalla::CambiarColor(7);
 			valido = true;
 		}
-		if (variablesEntorno::cont % 1200 == 0 && barraenergia) {
+		if (cont % 1200 == 0 && barraenergia) {
 			MoverEnemigo(enemigo, 5, 0);
 			escenario[enemigo.Y][enemigo.X] = 'F';
 		}
