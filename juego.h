@@ -22,23 +22,38 @@ namespace juego {
 	bool Actualizar(char escenario[FILAS][COLUMNAS]) {
 	
 		bool salir = false;
-		int tecla = 0;
+		//int tecla = 0;
 		
-		tecla = teclado::leerTecla();
-		if (tecla != 0) {
-			if (tecla == 27) {
-				//controla la salida
-				salir = true;
-			}
-			if (tecla == 97) MoverJugador(jugador, -1,0, escenario); //a							
-			if (tecla == 100) MoverJugador(jugador, 1,0,escenario);	//d			
-			if (tecla == 119) MoverJugador(jugador, 0,-1,escenario); //w
-			if (tecla == 115) MoverJugador(jugador, 0, 1, escenario); //s
-			if (tecla == 75) MoverJugador(jugador, -1, 0, escenario); //Izquierda							
-			if (tecla == 77) MoverJugador(jugador, 1, 0, escenario);	//derecha			
-			if (tecla == 72) MoverJugador(jugador, 0, -1, escenario); //arriba
-			if (tecla == 80) MoverJugador(jugador, 0, 1, escenario); //abajo
-
+		int tecla = teclado::leerTecla();
+		
+		switch (tecla) {
+		case teclado::TECLA_A: 
+			MoverJugador(jugador, -1, 0, escenario);
+			break;
+		case teclado::TECLA_D:
+			MoverJugador(jugador, 1, 0, escenario);
+			break;
+		case teclado::TECLA_W:
+			MoverJugador(jugador, 0, -1, escenario);
+			break;
+		case teclado::TECLA_S:
+			MoverJugador(jugador, 0, 1, escenario);
+			break;
+		case teclado::TECLA_LEFT:
+			MoverJugador(jugador, -1, 0, escenario);
+			break;
+		case teclado::TECLA_RIGTH:
+			MoverJugador(jugador, 1, 0, escenario);
+			break;
+		case teclado::TECLA_UP:
+			MoverJugador(jugador, 0, -1, escenario);
+			break;
+		case teclado::TECLA_DOWN:
+			MoverJugador(jugador, 0, 1, escenario);
+			break;
+		default:
+			salir = true;
+			break;
 		}
 		//llamar Administrador
 		salir=MI_JUEGO_H::Administrador(escenario, jugador, enemigo);
