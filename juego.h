@@ -10,19 +10,11 @@
 
 using namespace funcionesJuego;
 
-
 namespace juego {
 
-	void CargarRecursos(Personaje enemigo, Personaje &jugador, string v[28],char escenario[FILAS][COLUMNAS]) {
-		funcionesJuego::Nivel1(v);
-		funcionesJuego::ConvertiraMatriz(v, escenario, jugador, enemigo);
-		int a = 0;
-	}
-
-	bool Actualizar(char escenario[FILAS][COLUMNAS]) {
+	bool RefrescarPantalla(char escenario[FILAS][COLUMNAS]) {
 	
 		bool salir = false;
-		//int tecla = 0;
 		
 		int tecla = teclado::leerTecla();
 		
@@ -55,7 +47,6 @@ namespace juego {
 			salir = true;
 			break;
 		}
-		//llamar Administrador
 		salir=MI_JUEGO_H::Administrador(escenario, jugador, enemigo);
 
 		return salir;
@@ -69,10 +60,9 @@ namespace juego {
 		pantalla::CambiarColor(color::VERDE);
 		printf("%c", jugador.apariencia.imagen);
 	}
-	
-	void Jugar() {	
-		string v[28]; //esto es el la prepreentancion del mapa arreglarlo
-		char escenario[FILAS][COLUMNAS];
+
+	void CargarRecursos(Personaje enemigo, Personaje& jugador, string vecMapa[28], char escenario[FILAS][COLUMNAS]) {
+		funcionesJuego::Nivel1(vecMapa);
 		
 		jugador.X = 10;
 		jugador.Y = 10;
@@ -81,15 +71,22 @@ namespace juego {
 		enemigo.X = 45;
 		enemigo.Y = 11;
 		enemigo.apariencia.color = apariencia::IMAGEN_PIPA;
+
+		funcionesJuego::ConvertiraMatriz(vecMapa, escenario, jugador, enemigo);
+	}
+	
+	void Jugar() {	
+		string vecMapa[28];
+		char escenario[FILAS][COLUMNAS];
 		
-		CargarRecursos(enemigo, jugador, v, escenario);
+		CargarRecursos(enemigo, jugador, vecMapa, escenario);
 				
 		bool salir = false;
 		funcionesJuego::DibujarEscenario(escenario);
 
 		do {
 			Dibujar(escenario, jugador);
-			salir=Actualizar(escenario);
+			salir=RefrescarPantalla(escenario);
 			cont += 1;
 		} while (!salir);
 	}
