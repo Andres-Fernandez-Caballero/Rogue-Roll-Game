@@ -31,14 +31,14 @@ namespace funcionesJuego {
 
 		//borrar el anteropr				
 		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		pantalla::CambiarColor(7);
+		pantalla::CambiarColor(color::BLANCO);
 		printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
 		jugador.X += velX;
 		jugador.Y += velY;
 
 		//Barra de posicion
 		pantalla::PosicionarXY(2, 20);
-		pantalla::CambiarColor(7);
+		pantalla::CambiarColor(color::BLANCO);
 		printf("(%d,%d)", jugador.Y, jugador.X);
 
 		if (!ControlarPosicion(jugador, escenario)) {
@@ -82,11 +82,13 @@ namespace funcionesJuego {
 		//v[28] = "                                                                                                        ";
 	}
 
-	void ConvertiraMatriz(string v[28], char escenario[FILAS][COLUMNAS], Personaje& jugador, Personaje& enemigo) {
-
+	void ConvertiraMatriz(string v[28], char escenario[FILAS][COLUMNAS], Personaje& jugador, Personaje& enemigo) 
+	{
 		for (int i = 0; i < FILAS; i++) {
 			for (int j = 0; j < COLUMNAS; j++) {
+	
 				escenario[i][j] = v[i][j]; // V no es una matriz
+				
 				if (escenario[i][j] == objetos::JUGADOR) {
 					jugador.X = j;
 					jugador.Y = i;
@@ -103,55 +105,47 @@ namespace funcionesJuego {
 	{
 		pantalla::CambiarColor(color::BLANCO);
 
-		for (int i = 0; i < FILAS; i++) {
-			for (int j = 0; j < COLUMNAS; j++) {
-				//comezamos a dibujar la pantalla
-				if ((int)escenario[i][j] == objetos::MURO) {
-					pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-					printf("%c", apariencia::IMAGEN_MURO);
+		for (int y = 0; y < FILAS; y++) {
+			for (int x = 0; x < COLUMNAS; x++) {
+				
+				char caracterDelMapa = escenario[y][x];
+
+				switch (caracterDelMapa) {
+					case objetos::MURO:
+						pantalla::PosicionarXY(x, y); 
+						printf("%c", apariencia::IMAGEN_MURO);
+					break;
+
+					case objetos::JUGADOR: 
+					break;
+
+					case objetos::LLAVE:
+						pantalla::PosicionarXY(x, y); 
+						pantalla::CambiarColor(color::CELESTE);
+						printf("%c", apariencia::IMAGEN_LLAVE);
+						pantalla::CambiarColor(color::BLANCO);
+					break;
+
+					case objetos::PUERTA:
+						pantalla::PosicionarXY(x, y);
+						pantalla::CambiarColor(color::AMARILLO);
+						printf("%c", apariencia::IMAGEN_PUERTA);
+						pantalla::CambiarColor(color::BLANCO);
+					break;
+
+					case objetos::ENEMIGO:
+						pantalla::PosicionarXY(x, y);
+						pantalla::CambiarColor(color::ROJO);
+						printf("%c", apariencia::IMAGEN_ENEMIGO);
+						pantalla::CambiarColor(color::BLANCO);
+					break;
+
+					default:
+						pantalla::PosicionarXY(x, y);
+						printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
+					break;
 				}
-				else {
-					if ((int)escenario[i][j] == objetos::JUGADOR) {
-						//pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-						//printf("%c", 176);
-					}
-					else {
-						if ((int)escenario[i][j] == objetos::LLAVE) {
-							pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-							pantalla::CambiarColor(color::CELESTE);
-							printf("%c", apariencia::IMAGEN_LLAVE);
-							pantalla::CambiarColor(color::BLANCO);
-						}
-						else {
-							if ((int)escenario[i][j] == objetos::LLAVE) {
-								pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-								pantalla::CambiarColor(color::CELESTE);
-								printf("%c", apariencia::IMAGEN_LLAVE);
-								pantalla::CambiarColor(7);
-							}
-							else {
-								if ((int)escenario[i][j] == objetos::PUERTA) {
-									pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-									pantalla::CambiarColor(color::AMARILLO);
-									printf("%c", apariencia::IMAGEN_PUERTA);
-									pantalla::CambiarColor(color::BLANCO);
-								}
-								else {
-									if ((int)escenario[i][j] == objetos::ENEMIGO) {
-										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-										pantalla::CambiarColor(color::ROJO);
-										printf("%c", apariencia::IMAGEN_ENEMIGO);
-										pantalla::CambiarColor(color::BLANCO);
-									}
-									else {
-										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-										printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
-									}
-								}
-							}
-						}
-					}
-				}
+				
 			}
 		}
 	}
