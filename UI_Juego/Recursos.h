@@ -12,6 +12,22 @@
 
 using namespace std;
 
+namespace apariencia {
+	
+	const int IMAGEN_ARROBA = 64;
+	const int IMAGEN_PIPA = 169;
+}
+
+namespace color {
+
+	const int AZUL = 1;
+	const int VERDE = 2;
+	const int CELESTE = 3;
+	const int ROJO = 4;
+	const int VIOLETA = 5;
+	const int AMARILLO = 6;
+}
+
 namespace pantalla {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -69,11 +85,11 @@ namespace pantalla {
 	}
 
 	//TODO: este metodo modifica la vista del cursor en la consola nombre alternativo "ocultarCursor" aparte solo se usa una vez en false
-	void CambiarCursor(bool estado) {
+	void ocultarCursor(bool estado) {
 		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		CONSOLE_CURSOR_INFO info;
 		info.dwSize = 100;
-		info.bVisible = estado;
+		info.bVisible = !estado;
 		SetConsoleCursorInfo(consoleHandle, &info);
 	}
 

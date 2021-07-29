@@ -63,11 +63,11 @@ namespace juego {
 
 	void Dibujar(char escenario[FILAS][COLUMNAS],Personaje jugador) {
 	
-		pantalla::CambiarCursor(false);
+		pantalla::ocultarCursor(true);
 			
 		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		pantalla::CambiarColor(2);
-		printf("%c", jugador.icono);
+		pantalla::CambiarColor(color::VERDE);
+		printf("%c", jugador.apariencia.imagen);
 	}
 	
 	void Jugar() {	
@@ -76,11 +76,11 @@ namespace juego {
 		
 		jugador.X = 10;
 		jugador.Y = 10;
-		jugador.icono = 64;
+		jugador.apariencia.imagen = apariencia::IMAGEN_ARROBA;
 
 		enemigo.X = 45;
 		enemigo.Y = 11;
-		enemigo.icono = 169;
+		enemigo.apariencia.color = apariencia::IMAGEN_PIPA;
 		
 		CargarRecursos(enemigo, jugador, v, escenario);
 				
