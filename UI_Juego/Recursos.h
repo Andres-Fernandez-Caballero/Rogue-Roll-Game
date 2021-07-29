@@ -16,21 +16,37 @@ namespace apariencia {
 	
 	const int IMAGEN_ARROBA = 64;
 	const int IMAGEN_PIPA = 169;
+	const int IMAGEN_ESPACIO_BLANCO = 32;
+	const int IMAGEN_LLAVE = 35; // #
 }
 
 namespace color {
 
-	const int AZUL = 1;
+	const int NEGRO = 0;
+	const int AZUL_OSCURO = 1;
 	const int VERDE = 2;
 	const int CELESTE = 3;
 	const int ROJO = 4;
 	const int VIOLETA = 5;
 	const int AMARILLO = 6;
+	const int BLANCO = 7;
+	const int GRIS = 8;
+	const int AZUL_CLARO = 9;
 }
 
 namespace pantalla {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	void PosicionarXY(int col, int fila) {
+		COORD coord{};
+		coord.X = col;
+		coord.Y = fila;
+		SetConsoleCursorPosition(
+			GetStdHandle(STD_OUTPUT_HANDLE),
+			coord
+		);
+	}
 
 	void CambiarColor(int codigo_color) {
 		WORD wColor;
@@ -47,8 +63,17 @@ namespace pantalla {
 		}
 	}
 
+	//TODO: este metodo modifica la vista del cursor en la consola nombre alternativo "ocultarCursor" aparte solo se usa una vez en false
+	void ocultarCursor(bool estado) {
+		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_CURSOR_INFO info{};
+		info.dwSize = 100;
+		info.bVisible = !estado;
+		SetConsoleCursorInfo(consoleHandle, &info);
+	}
+
 	//TODO: esta funcion no se usa
-	void cls() {   
+	void cls() {
 		HANDLE                     hStdOut;
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		DWORD                      count;
@@ -83,25 +108,6 @@ namespace pantalla {
 		// Move the cursor home
 		SetConsoleCursorPosition(hStdOut, homeCoords);
 	}
-
-	//TODO: este metodo modifica la vista del cursor en la consola nombre alternativo "ocultarCursor" aparte solo se usa una vez en false
-	void ocultarCursor(bool estado) {
-		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-		CONSOLE_CURSOR_INFO info;
-		info.dwSize = 100;
-		info.bVisible = !estado;
-		SetConsoleCursorInfo(consoleHandle, &info);
-	}
-
-	void PosicionarXY(int col, int fila) {
-		COORD coord;
-		coord.X = col;
-		coord.Y = fila;
-		SetConsoleCursorPosition(
-			GetStdHandle(STD_OUTPUT_HANDLE),
-			coord
-		);
-	}	
 }
 
 namespace teclado {

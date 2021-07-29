@@ -17,22 +17,7 @@ namespace funcionesJuego {
 	
 	bool ControlarPosicion(Personaje& jugador, char escenario[FILAS][COLUMNAS]) {
 		bool validar = true;
-		/*if (jugador.X < 1) {
-			jugador.X = 1;
-			validar = false;
-		}
-		if (jugador.X >= 119) {
-			jugador.X = 118;
-			validar = false;
-		}
-		if (jugador.Y <= 0) {
-			jugador.Y = 1;
-			validar = false;
-		}
-		if (jugador.Y >= 28) {
-			jugador.Y = 27;
-			validar = false;
-		}*/
+		
 		if (escenario[jugador.Y][jugador.X] == 'X' || escenario[jugador.Y][jugador.X] == 'P') {
 			validar = false;
 		}
@@ -46,9 +31,8 @@ namespace funcionesJuego {
 
 		//borrar el anteropr				
 		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		//printf("%c", 32);
 		pantalla::CambiarColor(7);
-		printf("%c", 61);
+		printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
 		jugador.X += velX;
 		jugador.Y += velY;
 
@@ -134,14 +118,14 @@ namespace funcionesJuego {
 						if ((int)escenario[i][j] == '1') {
 							pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
 							pantalla::CambiarColor(3);
-							printf("%c", 35);
+							printf("%c", apariencia::IMAGEN_LLAVE);
 							pantalla::CambiarColor(7);
 						}
 						else {
 							if ((int)escenario[i][j] == '2') {
 								pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
 								pantalla::CambiarColor(3);
-								printf("%c", 35);
+								printf("%c", apariencia::IMAGEN_LLAVE);
 								pantalla::CambiarColor(7);
 							}
 							else {

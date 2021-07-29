@@ -141,9 +141,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="UI_Juego\Recursos.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="juego.h" />
+    <ClInclude Include="Mapas\Mapas.h" />
     <ClInclude Include="MiJuego.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

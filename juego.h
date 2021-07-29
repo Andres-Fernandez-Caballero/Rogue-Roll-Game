@@ -52,21 +52,19 @@ namespace juego {
 		return salir;
 	}
 
-	void Dibujar(char escenario[FILAS][COLUMNAS],Personaje jugador) {
-	
-		pantalla::ocultarCursor(true);
-			
-		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		pantalla::CambiarColor(color::VERDE);
-		printf("%c", jugador.apariencia.imagen);
+	void IniciarJugador(int posX, int posY, int imagen, int color) {
+		jugador.X = posX;
+		jugador.Y = posY;
+		jugador.apariencia.imagen = imagen;
+		jugador.apariencia.color = color;
 	}
 
 	void CargarRecursos(Personaje enemigo, Personaje& jugador, string vecMapa[28], char escenario[FILAS][COLUMNAS]) {
 		funcionesJuego::Nivel1(vecMapa);
 		
-		jugador.X = 10;
-		jugador.Y = 10;
-		jugador.apariencia.imagen = apariencia::IMAGEN_ARROBA;
+		pantalla::ocultarCursor(true);
+
+		IniciarJugador(10, 10, apariencia::IMAGEN_ARROBA, color::VERDE);
 
 		enemigo.X = 45;
 		enemigo.Y = 11;
@@ -75,18 +73,25 @@ namespace juego {
 		funcionesJuego::ConvertiraMatriz(vecMapa, escenario, jugador, enemigo);
 	}
 	
-	void Jugar() {	
+	void PosicionarJugador(char escenario[FILAS][COLUMNAS], Personaje jugador) {
+		pantalla::PosicionarXY(jugador.X, jugador.Y);
+		pantalla::CambiarColor(jugador.apariencia.color);
+		printf("%c", jugador.apariencia.imagen);
+	}
+
+	void Jugar() {
 		string vecMapa[28];
 		char escenario[FILAS][COLUMNAS];
-		
+
 		CargarRecursos(enemigo, jugador, vecMapa, escenario);
-				
+
 		bool salir = false;
 		funcionesJuego::DibujarEscenario(escenario);
 
 		do {
-			Dibujar(escenario, jugador);
-			salir=RefrescarPantalla(escenario);
+
+			PosicionarJugador(escenario, jugador);
+			salir = RefrescarPantalla(escenario);
 			cont += 1;
 		} while (!salir);
 	}

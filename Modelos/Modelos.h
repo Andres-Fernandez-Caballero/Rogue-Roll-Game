@@ -10,14 +10,14 @@ struct Posicion {
 };
 
 struct Apariencia {
-	int imagen;
-	int color;
+	int imagen = 0;
+	int color = 0;
 };
 
 struct Personaje {
-	std::string nombre;
-	int X;
-	int Y;
+	std::string nombre = "";
+	int X = 0;
+	int Y = 0;
 	Apariencia apariencia;
 } jugador, enemigo;  //TODO: eliminar las variables globales
 
