@@ -87,7 +87,7 @@ namespace funcionesJuego {
 		for (int i = 0; i < FILAS; i++) {
 			for (int j = 0; j < COLUMNAS; j++) {
 				escenario[i][j] = v[i][j]; // V no es una matriz
-				if (escenario[i][j] == '?') {
+				if (escenario[i][j] == objetos::JUGADOR) {
 					jugador.X = j;
 					jugador.Y = i;
 				}
@@ -101,50 +101,51 @@ namespace funcionesJuego {
 
 	void DibujarEscenario(char escenario[FILAS][COLUMNAS]) 
 	{
-		pantalla::CambiarColor(7);
+		pantalla::CambiarColor(color::BLANCO);
+
 		for (int i = 0; i < FILAS; i++) {
 			for (int j = 0; j < COLUMNAS; j++) {
 				//comezamos a dibujar la pantalla
-				if ((int)escenario[i][j] == 'X') {
+				if ((int)escenario[i][j] == objetos::MURO) {
 					pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-					printf("%c", 178);
+					printf("%c", apariencia::IMAGEN_MURO);
 				}
 				else {
-					if ((int)escenario[i][j] == '?') {
-						pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-						printf("%c", 176);
+					if ((int)escenario[i][j] == objetos::JUGADOR) {
+						//pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
+						//printf("%c", 176);
 					}
 					else {
-						if ((int)escenario[i][j] == '1') {
+						if ((int)escenario[i][j] == objetos::LLAVE) {
 							pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-							pantalla::CambiarColor(3);
+							pantalla::CambiarColor(color::CELESTE);
 							printf("%c", apariencia::IMAGEN_LLAVE);
-							pantalla::CambiarColor(7);
+							pantalla::CambiarColor(color::BLANCO);
 						}
 						else {
-							if ((int)escenario[i][j] == '2') {
+							if ((int)escenario[i][j] == objetos::LLAVE) {
 								pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-								pantalla::CambiarColor(3);
+								pantalla::CambiarColor(color::CELESTE);
 								printf("%c", apariencia::IMAGEN_LLAVE);
 								pantalla::CambiarColor(7);
 							}
 							else {
-								if ((int)escenario[i][j] == 'P') {
+								if ((int)escenario[i][j] == objetos::PUERTA) {
 									pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-									pantalla::CambiarColor(6);
-									printf("%c", 178);
-									pantalla::CambiarColor(7);
+									pantalla::CambiarColor(color::AMARILLO);
+									printf("%c", apariencia::IMAGEN_PUERTA);
+									pantalla::CambiarColor(color::BLANCO);
 								}
 								else {
-									if ((int)escenario[i][j] == 'O') {
+									if ((int)escenario[i][j] == objetos::ENEMIGO) {
 										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-										pantalla::CambiarColor(6);
-										printf("%c", 169);
-										pantalla::CambiarColor(7);
+										pantalla::CambiarColor(color::ROJO);
+										printf("%c", apariencia::IMAGEN_ENEMIGO);
+										pantalla::CambiarColor(color::BLANCO);
 									}
 									else {
 										pantalla::PosicionarXY(j, i); // j son columnas(X) e i son filas osea (Y)
-										printf("%c", 32);
+										printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
 									}
 								}
 							}
@@ -171,8 +172,8 @@ namespace funcionesJuego {
 	}
 
 	bool Administrador(char escenario[FILAS][COLUMNAS], Personaje jugador, Personaje& enemigo) {
-		//detectar colisiones
-			//mover objetos en pantalla
+		
+		//detectar colisiones y mover objetos en pantalla
 		int valido = false;
 		char objeto = colision(jugador, escenario);
 		bool barraenergia = true;

@@ -14,10 +14,20 @@ using namespace std;
 
 namespace apariencia {
 	
-	const int IMAGEN_ARROBA = 64;
-	const int IMAGEN_PIPA = 169;
+	const int IMAGEN_JUGADOR = 64;
+	const int IMAGEN_ENEMIGO = 156;
 	const int IMAGEN_ESPACIO_BLANCO = 32;
 	const int IMAGEN_LLAVE = 35; // #
+	const int IMAGEN_MURO = 178;
+	const int IMAGEN_PUERTA = 178;
+}
+
+namespace objetos {
+	const char LLAVE = 'K';
+	const char PUERTA = 'P';
+	const char MURO = 'X';
+	const char JUGADOR = '?';
+	const char ENEMIGO = 'O';
 }
 
 namespace color {

@@ -64,11 +64,11 @@ namespace juego {
 		
 		pantalla::ocultarCursor(true);
 
-		IniciarJugador(10, 10, apariencia::IMAGEN_ARROBA, color::VERDE);
+		IniciarJugador(10, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
 
 		enemigo.X = 45;
 		enemigo.Y = 11;
-		enemigo.apariencia.color = apariencia::IMAGEN_PIPA;
+		enemigo.apariencia.color = apariencia::IMAGEN_ENEMIGO;
 
 		funcionesJuego::ConvertiraMatriz(vecMapa, escenario, jugador, enemigo);
 	}
