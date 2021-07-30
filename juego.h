@@ -8,7 +8,7 @@
 #include "Modelos/Modelos.h"
 
 
-using namespace accionesJugego;
+using namespace accionesJuego;
 
 namespace juego {
 
@@ -20,28 +20,28 @@ namespace juego {
 		
 		switch (tecla) {
 		case teclado::TECLA_A: 
-			MoverJugador(jugador, -1, 0, escenario);
+			MoverJugador(-1, 0, escenario);
 			break;
 		case teclado::TECLA_D:
-			MoverJugador(jugador, 1, 0, escenario);
+			MoverJugador(1, 0, escenario);
 			break;
 		case teclado::TECLA_W:
-			MoverJugador(jugador, 0, -1, escenario);
+			MoverJugador(0, -1, escenario);
 			break;
 		case teclado::TECLA_S:
-			MoverJugador(jugador, 0, 1, escenario);
+			MoverJugador(0, 1, escenario);
 			break;
 		case teclado::TECLA_LEFT:
-			MoverJugador(jugador, -1, 0, escenario);
+			MoverJugador(-1, 0, escenario);
 			break;
 		case teclado::TECLA_RIGTH:
-			MoverJugador(jugador, 1, 0, escenario);
+			MoverJugador(1, 0, escenario);
 			break;
 		case teclado::TECLA_UP:
-			MoverJugador(jugador, 0, -1, escenario);
+			MoverJugador(0, -1, escenario);
 			break;
 		case teclado::TECLA_DOWN:
-			MoverJugador(jugador, 0, 1, escenario);
+			MoverJugador(0, 1, escenario);
 			break;
 		default:
 			salir = true;
@@ -62,13 +62,13 @@ namespace juego {
 	}
 
 	void CargarRecursos(Personaje& jugador, string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
-		accionesJugego::Nivel1(vecMapa);
+		accionesJuego::Nivel1(vecMapa);
 		
 		pantalla::ocultarCursor(true);
 
 		IniciarJugador("Martin", 1, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
 
-		accionesJugego::ConvertiraMatriz(vecMapa, escenario);
+		accionesJuego::ConvertiraMatriz(vecMapa, escenario);
 	}
 	
 	void PosicionarJugador(char escenario[FILAS][COLUMNAS], Personaje jugador) {
@@ -84,7 +84,7 @@ namespace juego {
 		CargarRecursos(jugador, vecMapa, escenario);
 
 		bool salir = false;
-		accionesJugego::DibujarEscenario(escenario);
+		accionesJuego::DibujarEscenario(escenario);
 
 		do {
 			PosicionarJugador(escenario, jugador);

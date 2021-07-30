@@ -10,18 +10,46 @@ const int LONG_VEC_MAP = 28;
 const int FILAS = 28;
 const int COLUMNAS = 104;
 
-namespace funcionesJuego {
+namespace accionesJuego {
 
-	char objetoEnEscenario(char escenario[FILAS][COLUMNAS]) {
-		return escenario[jugador.Y][jugador.X];
+	int llavesTotales = 0;
+
+	char obtenerObjetoEnEscenario(char escenario[FILAS][COLUMNAS],int posX, int posY) {
+		return escenario[posY][posX];
 	}
+
+	void escribirObjetoEnEscenario(char escenario[FILAS][COLUMNAS], int posX, int posY, char objeto) {
+		escenario[posY][posX] = objeto;
+	}
+
+	void mostrarObjetoPantalla(int posX, int posY, int imagen, int color) {
+		pantalla::PosicionarXY(posX, posY);
+		pantalla::CambiarColor(color);
+		printf("%c", imagen);
+	}
+
+	void limpiarPosicion(char escenario[FILAS][COLUMNAS], int posX, int posY) {
+		escribirObjetoEnEscenario(escenario, jugador.X, jugador.Y, objetos::ESPACIO_BLANCO);
+		mostrarObjetoPantalla(jugador.X, jugador.Y, apariencia::IMAGEN_ESPACIO_BLANCO, color::NEGRO);
+	}
+	
 	
 	bool colicion(Personaje& jugador, char escenario[FILAS][COLUMNAS]) {
 		bool avanzar = true;
+		char objeto = obtenerObjetoEnEscenario(escenario, jugador.X, jugador.Y);
 		
-		if (escenario[jugador.Y][jugador.X] == objetos::MURO || escenario[jugador.Y][jugador.X] == 'P') {
+		if ( objeto == objetos::MURO ) {
 			avanzar = false;
 		}
+		
+		if(objeto == objetos::PUERTA && jugador.llaves < llavesTotales){
+			avanzar = false;
+		}else if(objeto == objetos::PUERTA && jugador.llaves == llavesTotales){
+			avanzar = true;
+			limpiarPosicion(escenario, jugador.X, jugador.Y);
+
+		}
+		
 		return avanzar;
 	}
 
@@ -38,15 +66,14 @@ namespace funcionesJuego {
 		printf("--------------------------\n");
 	}
 
-	void MoverJugador(Personaje& jugador, int velX, int velY, char escenario[FILAS][COLUMNAS]) {
+	void MoverJugador(int velX, int velY, char escenario[FILAS][COLUMNAS]) {
 		//guardo la posicion temporal
 		int auxX = jugador.X;
 		int auxY = jugador.Y;
 
-		//borrar el anteropr				
-		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		pantalla::CambiarColor(color::BLANCO);
-		printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
+		//borrar el anteropr
+		mostrarObjetoPantalla(jugador.X, jugador.Y, apariencia::IMAGEN_ESPACIO_BLANCO, color::BLANCO);
+
 		jugador.X += velX;
 		jugador.Y += velY;
 
@@ -59,7 +86,7 @@ namespace funcionesJuego {
 		}
 	}
 
-	void Nivel1(string v[28]) { //TODO: pasar el mapa a una libreria aparte
+	void Nivel1(string v[LONG_VEC_MAP]) { //TODO: pasar el mapa a una libreria aparte
 		//61 ancho
 		//                111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999
 		//      01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -93,16 +120,14 @@ namespace funcionesJuego {
 		v[27] = "                                                                                                        ";//27
 	}
 
-	void ConvertiraMatriz(string vecMapa[28], char escenario[FILAS][COLUMNAS]) {
-		for (int i = 0; i < FILAS; i++) {
-			for (int j = 0; j < COLUMNAS; j++) {
-				escenario[i][j] = vecMapa[i][j]; 
-				/*
-				if (escenario[i][j] == objetos::JUGADOR) {
-					jugador.X = j;
-					jugador.Y = i;
+	void ConvertiraMatriz(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
+		for (int y = 0; y < FILAS; y++) {
+			for (int x = 0; x < COLUMNAS; x++) {
+				escenario[y][x] = vecMapa[y][x]; 
+
+				if (obtenerObjetoEnEscenario(escenario, x, y) == objetos::LLAVE) {
+					llavesTotales++;
 				}
-				*/
 			}
 		}
 	}
@@ -113,41 +138,29 @@ namespace funcionesJuego {
 		for (int y = 0; y < FILAS; y++) {
 			for (int x = 0; x < COLUMNAS; x++) {
 				
-				char caracterDelMapa = escenario[y][x];
+				char caracterDelMapa = obtenerObjetoEnEscenario(escenario, x, y);
 
 				switch (caracterDelMapa) {
 					case objetos::MURO:
-						pantalla::PosicionarXY(x, y); 
-						printf("%c", apariencia::IMAGEN_MURO);
+						mostrarObjetoPantalla(x, y, apariencia::IMAGEN_MURO, color::GRIS);
 						break;
-
 					case objetos::JUGADOR: 
 						break;
-
 					case objetos::LLAVE:
-						pantalla::PosicionarXY(x, y); 
-						pantalla::CambiarColor(color::CELESTE);
-						printf("%c", apariencia::IMAGEN_LLAVE);
-						pantalla::CambiarColor(color::BLANCO);
+						mostrarObjetoPantalla(x, y, apariencia::IMAGEN_LLAVE, color::CELESTE);	
 						break;
-
 					case objetos::PUERTA:
-						pantalla::PosicionarXY(x, y);
-						pantalla::CambiarColor(color::AMARILLO);
-						printf("%c", apariencia::IMAGEN_PUERTA);
-						pantalla::CambiarColor(color::BLANCO);
+						if (jugador.llaves == llavesTotales) {
+							mostrarObjetoPantalla(x, y, apariencia::IMAGEN_ESPACIO_BLANCO, color::NEGRO);
+							escribirObjetoEnEscenario(escenario, x, y, objetos::ESPACIO_BLANCO);
+						}
+						mostrarObjetoPantalla(x, y, apariencia::IMAGEN_PUERTA, color::AMARILLO);
 						break;
-
 					case objetos::ENEMIGO:
-						pantalla::PosicionarXY(x, y);
-						pantalla::CambiarColor(color::ROJO);
-						printf("%c", apariencia::IMAGEN_ENEMIGO);
-						pantalla::CambiarColor(color::BLANCO);
+						mostrarObjetoPantalla(x, y, apariencia::IMAGEN_ENEMIGO, color::ROJO);
 						break;
-
 					default:
-						pantalla::PosicionarXY(x, y);
-						printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
+						mostrarObjetoPantalla(x, y, apariencia::IMAGEN_ESPACIO_BLANCO, color::NEGRO);
 						break;
 				}
 			}
@@ -173,36 +186,34 @@ namespace funcionesJuego {
 		
 		//detectar colisiones y mover objetos en pantalla
 		int valido = false;
-		char objeto = objetoEnEscenario(escenario);
+		char objeto = obtenerObjetoEnEscenario(escenario, jugador.X, jugador.Y);
 		
 		switch (objeto) {
 		
 		case objetos::LLAVE:
-			pantalla::PosicionarXY(jugador.X, jugador.Y);
-			escenario[jugador.Y][jugador.X] = apariencia::IMAGEN_ESPACIO_BLANCO;
-			escenario[2][60] = apariencia::IMAGEN_ESPACIO_BLANCO;
-			pantalla::PosicionarXY(60, 2);
-			//pantalla::CambiarColor(color::AMARILLO);
-			printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
-			pantalla::CambiarColor(color::BLANCO);
+			limpiarPosicion(escenario, jugador.X, jugador.Y);
+			jugador.llaves++;
 			break;
 		case objetos::ENEMIGO:
-			
-			pantalla::PosicionarXY(19, 20); // cartel en pantalla
+			/* barra de combate */
+			/*------------------*/
+			pantalla::PosicionarXY(9, 20); // cartel en pantalla
+			pantalla::CambiarColor(color::VERDE);
 			printf("combate!");
-			jugador.llaves++;
-			printf("%c", apariencia::IMAGEN_ESPACIO_BLANCO);
-			pantalla::PosicionarXY(jugador.X, jugador.Y);
+			/*------------------*/
+			limpiarPosicion(escenario, jugador.X, jugador.Y);
 			break;
+		case objetos::PUERTA:
+			if (jugador.llaves == llavesTotales) {
+				escribirObjetoEnEscenario(escenario, jugador.X, jugador.Y, objetos::ESPACIO_BLANCO);
+				limpiarPosicion(escenario, jugador.X, jugador.Y);
+			}
 		case objetos::FINAL_NIVEL:
 			pantalla::PosicionarXY(jugador.X, jugador.Y);
 			pantalla::CambiarColor(color::AMARILLO);
 			printf("Ganaste");
 			pantalla::CambiarColor(color::BLANCO);
 			valido = true;
-			break;
-
-		default:
 			break;
 		}
 		return valido;

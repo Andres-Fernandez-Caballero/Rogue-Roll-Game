@@ -30,6 +30,7 @@ namespace objetos {
 	const char JUGADOR = 'J';
 	const char ENEMIGO = 'E';
 	const char FINAL_NIVEL = 'F';
+	const char ESPACIO_BLANCO = ' ';
 }
 
 namespace color {
