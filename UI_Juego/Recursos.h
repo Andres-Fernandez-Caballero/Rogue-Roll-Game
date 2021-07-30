@@ -17,17 +17,19 @@ namespace apariencia {
 	const int IMAGEN_JUGADOR = 64;
 	const int IMAGEN_ENEMIGO = 156;
 	const int IMAGEN_ESPACIO_BLANCO = 32;
-	const int IMAGEN_LLAVE = 35; // #
+	const int IMAGEN_LLAVE = 170; 
 	const int IMAGEN_MURO = 178;
 	const int IMAGEN_PUERTA = 178;
 }
 
 namespace objetos {
+
 	const char LLAVE = 'K';
 	const char PUERTA = 'P';
 	const char MURO = 'X';
-	const char JUGADOR = '?';
-	const char ENEMIGO = 'O';
+	const char JUGADOR = 'J';
+	const char ENEMIGO = 'E';
+	const char FINAL_NIVEL = 'F';
 }
 
 namespace color {
@@ -42,16 +44,18 @@ namespace color {
 	const int BLANCO = 7;
 	const int GRIS = 8;
 	const int AZUL_CLARO = 9;
+	const int SALMON = 12;
+	const int CREMA = 14;
 }
 
 namespace pantalla {
 
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	void PosicionarXY(int col, int fila) {
+	void PosicionarXY(int posX, int posY) {
 		COORD coord{};
-		coord.X = col;
-		coord.Y = fila;
+		coord.X = posX;
+		coord.Y = posY;
 		SetConsoleCursorPosition(
 			GetStdHandle(STD_OUTPUT_HANDLE),
 			coord
@@ -134,24 +138,21 @@ namespace teclado {
 
 
 	int leerTecla() {
+		int ascii = -1;
 		if (_kbhit()) {
 			char l = _getch();
-			int ascii = (int)l;
-			return ascii;
+			ascii = (int)l;
 		}
+		return ascii;
 	}
 }
 
 namespace logica {
-	//TODO: este metodo no se usa todavia
-	void CambiarSemilla() {
-		unsigned int seed = time(0);
+	
+	int generarNumeroAleatorio(int min, int max) {
+		unsigned int seed = (unsigned int)time(0);
 		srand(seed);
-	}
 
-
-	// TODO: este metodo no se usa, cambiar el nombre por uno mas coherente...
-	int Random_Int(int min, int max) {
 		int random = min + rand() % ((max + 1) - min);
 		return random;
 	}

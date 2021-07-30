@@ -8,7 +8,7 @@
 #include "Modelos/Modelos.h"
 
 
-using namespace funcionesJuego;
+using namespace accionesJugego;
 
 namespace juego {
 
@@ -47,30 +47,28 @@ namespace juego {
 			salir = true;
 			break;
 		}
-		salir=MI_JUEGO_H::Administrador(escenario, jugador, enemigo);
+		salir=MI_JUEGO_H::Administrador(escenario);
 
 		return salir;
 	}
 
-	void IniciarJugador(int posX, int posY, int imagen, int color) {
+	void IniciarJugador(std::string nombre, int posX, int posY, int imagen, int color) {
+		jugador.nombre = nombre;
 		jugador.X = posX;
 		jugador.Y = posY;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
+		//jugador.llaves = 0;
 	}
 
-	void CargarRecursos(Personaje enemigo, Personaje& jugador, string vecMapa[28], char escenario[FILAS][COLUMNAS]) {
-		funcionesJuego::Nivel1(vecMapa);
+	void CargarRecursos(Personaje& jugador, string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
+		accionesJugego::Nivel1(vecMapa);
 		
 		pantalla::ocultarCursor(true);
 
-		IniciarJugador(10, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
+		IniciarJugador("Martin", 1, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
 
-		enemigo.X = 45;
-		enemigo.Y = 11;
-		enemigo.apariencia.color = apariencia::IMAGEN_ENEMIGO;
-
-		funcionesJuego::ConvertiraMatriz(vecMapa, escenario, jugador, enemigo);
+		accionesJugego::ConvertiraMatriz(vecMapa, escenario);
 	}
 	
 	void PosicionarJugador(char escenario[FILAS][COLUMNAS], Personaje jugador) {
@@ -80,16 +78,15 @@ namespace juego {
 	}
 
 	void Jugar() {
-		string vecMapa[28];
+		string vecMapa[LONG_VEC_MAP];
 		char escenario[FILAS][COLUMNAS];
 
-		CargarRecursos(enemigo, jugador, vecMapa, escenario);
+		CargarRecursos(jugador, vecMapa, escenario);
 
 		bool salir = false;
-		funcionesJuego::DibujarEscenario(escenario);
+		accionesJugego::DibujarEscenario(escenario);
 
 		do {
-
 			PosicionarJugador(escenario, jugador);
 			salir = RefrescarPantalla(escenario);
 			cont += 1;

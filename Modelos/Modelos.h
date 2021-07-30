@@ -10,16 +10,23 @@ struct Posicion {
 };
 
 struct Apariencia {
-	int imagen = 0;
-	int color = 0;
+	int imagen;
+	int color;
+};
+
+struct Puerta {
+	int x;
+	int y;
+	Apariencia apariencia;
 };
 
 struct Personaje {
-	std::string nombre = "";
-	int X = 0;
-	int Y = 0;
+	std::string nombre;
+	int X ;
+	int Y;
 	Apariencia apariencia;
-} jugador, enemigo;  //TODO: eliminar las variables globales
+	int llaves;
+} jugador;  //TODO: eliminar las variables globales
 
 
 Personaje CrearJugador(
@@ -38,6 +45,10 @@ Personaje CrearJugador(
 	personaje.apariencia.color = color;
 
 	return personaje;
+}
+
+void recogerLlave(Personaje* personaje) {
+	personaje->llaves++;
 }
 	
 extern int cont = 0; // esto tiene alguna relacion con la barra de vida ... corregir!!!
