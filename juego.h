@@ -4,7 +4,7 @@
 
 
 #include "UI_Juego/Recursos.h"
-#include "MiJuego.h"
+#include "ControladorJuego.h"
 #include "Modelos/Modelos.h"
 
 
@@ -14,7 +14,7 @@ namespace juego {
 
 	bool RefrescarPantalla(char escenario[FILAS][COLUMNAS]) {
 	
-		bool salir = false;
+		bool juegoTernimando = false;
 		
 		int tecla = teclado::leerTecla();
 		
@@ -44,12 +44,12 @@ namespace juego {
 			MoverJugador(0, 1, escenario);
 			break;
 		default:
-			salir = true;
+			juegoTernimando = true;
 			break;
 		}
-		salir=MI_JUEGO_H::Administrador(escenario);
+		juegoTernimando = controladorEventos(escenario);
 
-		return salir;
+		return juegoTernimando;
 	}
 
 	void IniciarJugador(std::string nombre, int posX, int posY, int imagen, int color) {
@@ -58,10 +58,10 @@ namespace juego {
 		jugador.Y = posY;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
-		//jugador.llaves = 0;
+		jugador.llaves = 0;
 	}
 
-	void CargarRecursos(Personaje& jugador, string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
+	void CargarRecursos(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
 		accionesJuego::Nivel1(vecMapa);
 		
 		pantalla::ocultarCursor(true);
@@ -71,7 +71,7 @@ namespace juego {
 		accionesJuego::ConvertiraMatriz(vecMapa, escenario);
 	}
 	
-	void PosicionarJugador(char escenario[FILAS][COLUMNAS], Personaje jugador) {
+	void PosicionarJugador(char escenario[FILAS][COLUMNAS]) {
 		pantalla::PosicionarXY(jugador.X, jugador.Y);
 		pantalla::CambiarColor(jugador.apariencia.color);
 		printf("%c", jugador.apariencia.imagen);
@@ -81,13 +81,13 @@ namespace juego {
 		string vecMapa[LONG_VEC_MAP];
 		char escenario[FILAS][COLUMNAS];
 
-		CargarRecursos(jugador, vecMapa, escenario);
+		CargarRecursos(vecMapa, escenario);
 
 		bool salir = false;
 		accionesJuego::DibujarEscenario(escenario);
 
 		do {
-			PosicionarJugador(escenario, jugador);
+			PosicionarJugador(escenario);
 			salir = RefrescarPantalla(escenario);
 			cont += 1;
 		} while (!salir);

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef MI_JUEGO_H
-#define MI_JUEGO_H
+#ifndef CONTROLADOR_JUEGO_H
+#define CONTROLADOR_JUEGO_H
 
 
 #include "UI_Juego/Recursos.h"
@@ -182,7 +182,7 @@ namespace accionesJuego {
 		}
 	}
 
-	bool Administrador(char escenario[FILAS][COLUMNAS]) {
+	bool controladorEventos(char escenario[FILAS][COLUMNAS]) {
 		
 		//detectar colisiones y mover objetos en pantalla
 		int valido = false;
@@ -219,5 +219,5 @@ namespace accionesJuego {
 		return valido;
 	}
 }
-#endif // !MI_JUEGO_H
+#endif // !CONTROLADOR_JUEGO_H
 
