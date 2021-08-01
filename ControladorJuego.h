@@ -2,7 +2,6 @@
 #ifndef CONTROLADOR_JUEGO_H
 #define CONTROLADOR_JUEGO_H
 
-
 #include "UI_Juego/Recursos.h"
 #include "Modelos/Modelos.h"
 
@@ -10,9 +9,16 @@ const int LONG_VEC_MAP = 28;
 const int FILAS = 28;
 const int COLUMNAS = 104;
 
+const int ADELANTE = 1;
+const int ATRAS = -1;
+
 namespace accionesJuego {
 
 	int llavesTotales = 0;
+
+	int enemigosTotales = 0;
+
+	int direccionEnemigo = ADELANTE;
 
 	char obtenerObjetoEnEscenario(char escenario[FILAS][COLUMNAS],int posX, int posY) {
 		return escenario[posY][posX];
@@ -29,27 +35,27 @@ namespace accionesJuego {
 	}
 
 	void limpiarPosicion(char escenario[FILAS][COLUMNAS], int posX, int posY) {
-		escribirObjetoEnEscenario(escenario, jugador.X, jugador.Y, objetos::ESPACIO_BLANCO);
-		mostrarObjetoPantalla(jugador.X, jugador.Y, apariencia::IMAGEN_ESPACIO_BLANCO, color::NEGRO);
+		escribirObjetoEnEscenario(escenario, posX, posY, objetos::ESPACIO_BLANCO);
+		mostrarObjetoPantalla(posX, posY, apariencia::IMAGEN_ESPACIO_BLANCO, color::NEGRO);
 	}
 	
-	
-	bool colicion(Personaje& jugador, char escenario[FILAS][COLUMNAS]) {
+	bool puedeAvanzar(Personaje& personaje, char escenario[FILAS][COLUMNAS]) {
 		bool avanzar = true;
-		char objeto = obtenerObjetoEnEscenario(escenario, jugador.X, jugador.Y);
+		char objeto = obtenerObjetoEnEscenario(escenario, personaje.X, personaje.Y);
 		
 		if ( objeto == objetos::MURO ) {
 			avanzar = false;
 		}
 		
-		if(objeto == objetos::PUERTA && jugador.llaves < llavesTotales){
+		if(objeto == objetos::PUERTA && personaje.llaves < llavesTotales) {
 			avanzar = false;
-		}else if(objeto == objetos::PUERTA && jugador.llaves == llavesTotales){
-			avanzar = true;
-			limpiarPosicion(escenario, jugador.X, jugador.Y);
 
 		}
 		
+		if(objeto == objetos::PUERTA && personaje.llaves == llavesTotales) {
+			avanzar = true;
+			limpiarPosicion(escenario, personaje.X, personaje.Y);
+		}
 		return avanzar;
 	}
 
@@ -66,30 +72,62 @@ namespace accionesJuego {
 		printf("--------------------------\n");
 	}
 
-	void MoverJugador(int velX, int velY, char escenario[FILAS][COLUMNAS]) {
-		//guardo la posicion temporal
+	void MoverJugador(int posX, int posY, char escenario[FILAS][COLUMNAS]) {
+		// posicion inicial
 		int auxX = jugador.X;
 		int auxY = jugador.Y;
 
-		//borrar el anteropr
+		//borrar la posicion anterior
 		mostrarObjetoPantalla(jugador.X, jugador.Y, apariencia::IMAGEN_ESPACIO_BLANCO, color::BLANCO);
-
-		jugador.X += velX;
-		jugador.Y += velY;
+		
+		// nueva posicion
+		jugador.X += posX;
+		jugador.Y += posY;
 
 		//Barra de posicion
 		mostrarBarraJugador();
 
-		if (!colicion(jugador, escenario)) {
+		// si el personaje no puede avanzar recupera su posicion inicial
+		if (!puedeAvanzar(jugador, escenario)) {
 			jugador.X = auxX;
 			jugador.Y = auxY;
 		}
 	}
 
-	void Nivel1(string v[LONG_VEC_MAP]) { //TODO: pasar el mapa a una libreria aparte
-		//61 ancho
-		//                111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999
-		//      01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+	void moverEnemigos(Personaje enemigos[12], char escenario[FILAS][COLUMNAS]) {
+		for (int numero = 0; numero < enemigosTotales; numero++) {
+			//posicion inicial
+			int initX = enemigos[numero].X;
+			int initY = enemigos[numero].Y;
+			
+			enemigos[numero].X += direccionEnemigo * 1;
+			enemigos[numero].Y += direccionEnemigo * 0;
+
+			// si el personaje no puede avanzar recupera su posicion inicial
+			if (!puedeAvanzar(enemigos[numero], escenario)) {
+				enemigos[numero].X = initX;
+				enemigos[numero].Y = initY;
+
+				if (direccionEnemigo == ADELANTE) {
+					direccionEnemigo = ATRAS;
+				}
+				else {
+					direccionEnemigo = ADELANTE;
+				}
+			}
+			else {
+				limpiarPosicion(escenario, initX, initY);
+				escribirObjetoEnEscenario(escenario, enemigos[numero].X, enemigos[numero].Y, objetos::ENEMIGO);
+				mostrarObjetoPantalla(enemigos[numero].X, enemigos[numero].Y, enemigos[numero].apariencia.imagen, enemigos[numero].apariencia.color);
+			}
+		}
+	}
+
+	void Nivel1(string v[LONG_VEC_MAP]) {
+
+		//******0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111****//x
+		//******0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000****//x
+		//******01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123***//x
 		v[0] =  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//0
 		v[1] =  "X                                          XXX          XXXXXXXX                            X           ";//1
 		v[2] =  "X                        E          E             XXXX      P                               X           ";//2
@@ -120,13 +158,27 @@ namespace accionesJuego {
 		v[27] = "                                                                                                        ";//27
 	}
 
-	void ConvertiraMatriz(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
+	void cargarEscenario(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS], Personaje enemigos[12]) {
 		for (int y = 0; y < FILAS; y++) {
 			for (int x = 0; x < COLUMNAS; x++) {
 				escenario[y][x] = vecMapa[y][x]; 
 
-				if (obtenerObjetoEnEscenario(escenario, x, y) == objetos::LLAVE) {
-					llavesTotales++;
+				char objeto = obtenerObjetoEnEscenario(escenario, x, y);
+				
+			
+				switch (objeto) {
+					case objetos::LLAVE:
+						llavesTotales++;
+						break;
+					case objetos::ENEMIGO:
+
+						enemigos[enemigosTotales].nombre = "Enemigo";
+						enemigos[enemigosTotales].X = x;
+						enemigos[enemigosTotales].Y = y;
+						enemigos[enemigosTotales].apariencia.imagen = apariencia::IMAGEN_ENEMIGO;
+						enemigos[enemigosTotales].apariencia.color = color::ROJO;
+						enemigosTotales++;
+						break;
 				}
 			}
 		}
@@ -167,21 +219,6 @@ namespace accionesJuego {
 		}
 	}
 
-	void MoverEnemigo(Personaje& enemigo, int desplazamientoenY, int direccion) {
-
-		pantalla::PosicionarXY(enemigo.X, enemigo.Y); // j son columnas(X) e i son filas osea (Y)
-		pantalla::CambiarColor(color::ROJO);
-		printf("%c", apariencia::IMAGEN_ENEMIGO);
-		pantalla::CambiarColor(color::BLANCO);
-
-		int posYinicial = enemigo.Y;
-		if (enemigo.Y == posYinicial)
-		{
-			//+
-			direccion = 1;
-		}
-	}
-
 	bool controladorEventos(char escenario[FILAS][COLUMNAS]) {
 		
 		//detectar colisiones y mover objetos en pantalla
@@ -201,13 +238,9 @@ namespace accionesJuego {
 			pantalla::CambiarColor(color::VERDE);
 			printf("combate!");
 			/*------------------*/
+			jugador.vida--;
 			limpiarPosicion(escenario, jugador.X, jugador.Y);
 			break;
-		case objetos::PUERTA:
-			if (jugador.llaves == llavesTotales) {
-				escribirObjetoEnEscenario(escenario, jugador.X, jugador.Y, objetos::ESPACIO_BLANCO);
-				limpiarPosicion(escenario, jugador.X, jugador.Y);
-			}
 		case objetos::FINAL_NIVEL:
 			pantalla::PosicionarXY(jugador.X, jugador.Y);
 			pantalla::CambiarColor(color::AMARILLO);

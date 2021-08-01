@@ -1,14 +1,12 @@
 #pragma once
-#ifndef RECURSOS
-#define RECURSOS
-
+#ifndef RECURSOS_H
+#define RECURSOS_H
 
 #include <iostream>
 #include <time.h>
 #include <Windows.h>
 #include <conio.h>
 #include <stdio.h>
-
 
 using namespace std;
 
@@ -63,6 +61,10 @@ namespace pantalla {
 		);
 	}
 
+	void espera(int miliseg) {
+		Sleep(miliseg);
+	}
+
 	void CambiarColor(int codigo_color) {
 		WORD wColor;
 
@@ -78,7 +80,6 @@ namespace pantalla {
 		}
 	}
 
-	//TODO: este metodo modifica la vista del cursor en la consola nombre alternativo "ocultarCursor" aparte solo se usa una vez en false
 	void ocultarCursor(bool estado) {
 		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		CONSOLE_CURSOR_INFO info{};
@@ -87,8 +88,7 @@ namespace pantalla {
 		SetConsoleCursorInfo(consoleHandle, &info);
 	}
 
-	//TODO: esta funcion no se usa
-	void cls() {
+	void limpiarPantalla() {
 		HANDLE                     hStdOut;
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		DWORD                      count;
@@ -137,7 +137,6 @@ namespace teclado {
 	const int TECLA_DOWN = 80;
 	const int TECLA_ESC = 27;
 
-
 	int leerTecla() {
 		int ascii = -1;
 		if (_kbhit()) {
@@ -158,5 +157,5 @@ namespace logica {
 		return random;
 	}
 }
-#endif // !RECURSOS
+#endif // !RECURSOS_H
 
