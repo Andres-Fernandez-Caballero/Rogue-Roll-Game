@@ -1,16 +1,16 @@
 #pragma once
-#ifndef JUEGO
-#define JUEGO
-
+#ifndef JUEGO_H
+#define JUEGO_H
 
 #include "UI_Juego/Recursos.h"
 #include "ControladorJuego.h"
 #include "Modelos/Modelos.h"
 
-
 using namespace accionesJuego;
 
 namespace juego {
+
+	Personaje enemigos[12];
 
 	bool RefrescarPantalla(char escenario[FILAS][COLUMNAS]) {
 	
@@ -53,12 +53,15 @@ namespace juego {
 	}
 
 	void IniciarJugador(std::string nombre, int posX, int posY, int imagen, int color) {
+		int vidaMax = 100;
+
 		jugador.nombre = nombre;
 		jugador.X = posX;
 		jugador.Y = posY;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
 		jugador.llaves = 0;
+		jugador.vida = vidaMax;
 	}
 
 	void CargarRecursos(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
@@ -68,13 +71,11 @@ namespace juego {
 
 		IniciarJugador("Martin", 1, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
 
-		accionesJuego::ConvertiraMatriz(vecMapa, escenario);
+		accionesJuego::cargarEscenario(vecMapa, escenario, enemigos);
 	}
 	
-	void PosicionarJugador(char escenario[FILAS][COLUMNAS]) {
-		pantalla::PosicionarXY(jugador.X, jugador.Y);
-		pantalla::CambiarColor(jugador.apariencia.color);
-		printf("%c", jugador.apariencia.imagen);
+	void PosicionarJugador() {
+		mostrarObjetoPantalla(jugador.X, jugador.Y, jugador.apariencia.imagen, jugador.apariencia.color);
 	}
 
 	void Jugar() {
@@ -83,14 +84,16 @@ namespace juego {
 
 		CargarRecursos(vecMapa, escenario);
 
-		bool salir = false;
+		bool juegoTerminado = false;
 		accionesJuego::DibujarEscenario(escenario);
 
 		do {
-			PosicionarJugador(escenario);
-			salir = RefrescarPantalla(escenario);
-			cont += 1;
-		} while (!salir);
+			PosicionarJugador();
+			
+			juegoTerminado = RefrescarPantalla(escenario);
+			pantalla::espera(30);
+			moverEnemigos(enemigos, escenario);
+		} while (!juegoTerminado);
 	}
 }
-#endif // !"GAME"
+#endif // !JUEGO_H
