@@ -91,8 +91,8 @@ namespace juego {
 			PosicionarJugador();
 			
 			juegoTerminado = RefrescarPantalla(escenario);
-			pantalla::espera(30);
-			moverEnemigos(enemigos, escenario);
+			//pantalla::espera(30);
+			//moverEnemigos(enemigos, escenario);
 		} while (!juegoTerminado);
 	}
 }

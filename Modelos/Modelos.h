@@ -13,14 +13,14 @@ struct Apariencia {
 struct Personaje {
 	std::string nombre;
 	int vida;
-	int X ;
+	int X;
 	int Y;
 	Apariencia apariencia;
 	int llaves;
-} jugador;
+} jugador; //variable global
 
-void recogerLlave(Personaje* personaje) {
-	personaje->llaves++;
+void recogerLlave(Personaje& personaje) {
+	personaje.llaves++;
 }
 
 #endif // !MODELS_H
