@@ -4,6 +4,7 @@
 
 #include "UI_Juego/Recursos.h"
 #include "Modelos/Modelos.h"
+#include<string>
 
 const int LONG_VEC_MAP = 28;
 const int FILAS = 28;
@@ -12,13 +13,82 @@ const int COLUMNAS = 104;
 const int ADELANTE = 1;
 const int ATRAS = -1;
 
+namespace tableros {
+	void mostrarBarraJugador() {
+		pantalla::PosicionarXY(0, 20);
+		pantalla::CambiarColor(color::BLANCO);
+		printf("--------------------------\n");
+		printf("Jugador\n");
+		cout << "Nombre del Jugador: " << jugador.nombre << "\n";
+		printf("Vida: %d", jugador.vida);
+		printf("Coordenadas\n");
+		printf("X: %d\n", jugador.X);
+		printf("Y: %d\n", jugador.Y);
+		printf("LLaves: %d\n", jugador.llaves);
+		printf("--------------------------\n");
+	}
+
+	void mostrarAlerta(std::string mensaje, int color) {
+		pantalla::PosicionarXY(9, 20); // cartel en pantalla
+		pantalla::CambiarColor(color);
+		cout << mensaje;
+	}
+
+	void mostrarVictoria() {
+		//pantalla::limpiarPantalla();
+		system("cls");
+		pantalla::PosicionarXY(35, 10);
+		pantalla::CambiarColor(color::AMARILLO);
+		printf("***********************\n");
+		pantalla::PosicionarXY(35, 11);
+		printf("******* Ganaste *******\n");
+		pantalla::PosicionarXY(35, 12);
+		printf("***********************\n");
+		pantalla::espera(1500); //1,5 seg
+	}
+}
+
 namespace accionesJuego {
 
 	int llavesTotales = 0;
 
 	int enemigosTotales = 0;
-
 	int direccionEnemigo = ADELANTE;
+
+	void Nivel1(string v[LONG_VEC_MAP]) {
+
+		//******0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111****//x
+		//******0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000****//x
+		//******01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123***//x
+		v[0] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//0
+		v[1] = "X                                          XXX          XXXXXXXX                            X           ";//1
+		v[2] = "X                        E          E             XXXX      P                               X           ";//2
+		v[3] = "X    X    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXDDXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//3
+		v[4] = "X    X    XX                                 X  XXX  XXX    X  X E                          X           ";//4
+		v[5] = "X    X  XXXX                                 XK X           X  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//5
+		v[6] = "X    X  XXK                                  XXXX           X  X                            X           ";//6
+		v[7] = "X    XXXXXXXXXXXXXXXXXXXXXXXXXX                             X  XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//7
+		v[8] = "X                                      E                    X  X E                          X           ";//8
+		v[9] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX     X  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//9
+		v[10] = "XJ   XXXXX        XXXX                     E          X     X  X                            X           ";//10
+		v[11] = "X                          E      XXXX                X     X  XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//11
+		v[12] = "X                 XXXX                     E                X  X E                          X           ";//12
+		v[13] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//13
+		v[14] = "                                                               X                            X           ";//14
+		v[15] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//15
+		v[16] = "                                                               X E                          X           ";//16
+		v[17] = "                                                               X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//17
+		v[18] = "                                                               X                            X           ";//18
+		v[19] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//19
+		v[20] = "                                                               X E                          X           ";//20
+		v[21] = "                                                               X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//21
+		v[22] = "                                                               X                            X           ";//22
+		v[23] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//23
+		v[24] = "                                                               XF      E                    X           ";//24
+		v[25] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//25
+		v[26] = "                                                                                                        ";//26
+		v[27] = "                                                                                                        ";//27
+	}
 
 	char obtenerObjetoEnEscenario(char escenario[FILAS][COLUMNAS],int posX, int posY) {
 		return escenario[posY][posX];
@@ -58,19 +128,6 @@ namespace accionesJuego {
 		return avanzar;
 	}
 
-	void mostrarBarraJugador() {
-		pantalla::PosicionarXY(0, 20);
-		pantalla::CambiarColor(color::BLANCO);
-		printf("--------------------------\n");
-		printf("Jugador\n");
-		cout << "Nombre del Jugador: " << jugador.nombre << "\n";
-		printf("Coordenadas\n");
-		printf("X: %d\n", jugador.X);
-		printf("Y: %d\n", jugador.Y);
-		printf("LLaves: %d\n", jugador.llaves);
-		printf("--------------------------\n");
-	}
-
 	void MoverJugador(int posX, int posY, char escenario[FILAS][COLUMNAS]) {
 		// posicion inicial
 		int auxX = jugador.X;
@@ -84,7 +141,7 @@ namespace accionesJuego {
 		jugador.Y += posY;
 
 		//Barra de posicion
-		mostrarBarraJugador();
+		tableros::mostrarBarraJugador();
 
 		// si el personaje no puede avanzar recupera su posicion inicial
 		if (!puedeAvanzar(jugador, escenario)) {
@@ -98,7 +155,7 @@ namespace accionesJuego {
 			//posicion inicial
 			int initX = enemigos[numero].X;
 			int initY = enemigos[numero].Y;
-			
+
 			enemigos[numero].X += direccionEnemigo * 1;
 			enemigos[numero].Y += direccionEnemigo * 0;
 
@@ -115,46 +172,25 @@ namespace accionesJuego {
 				}
 			}
 			else {
+
 				limpiarPosicion(escenario, initX, initY);
-				escribirObjetoEnEscenario(escenario, enemigos[numero].X, enemigos[numero].Y, objetos::ENEMIGO);
+				escribirObjetoEnEscenario(escenario, enemigos[numero].X, enemigos[numero].Y, enemigos[numero].apariencia.objeto);
 				mostrarObjetoPantalla(enemigos[numero].X, enemigos[numero].Y, enemigos[numero].apariencia.imagen, enemigos[numero].apariencia.color);
 			}
 		}
 	}
 
-	void Nivel1(string v[LONG_VEC_MAP]) {
+	void eliminarEnemigo(Personaje enemigos[12], int posX, int posY) {
 
-		//******0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111****//x
-		//******0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000****//x
-		//******01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123***//x
-		v[0] =  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//0
-		v[1] =  "X                                          XXX          XXXXXXXX                            X           ";//1
-		v[2] =  "X                        E          E             XXXX      P                               X           ";//2
-		v[3] =  "X    X    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXDDXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//3
-		v[4] =  "X    X    XX                                 X  XXX  XXX    X  X E                          X           ";//4
-		v[5] =  "X    X  XXXX                                 XK X           X  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//5
-		v[6] =  "X    X  XXK                                  XXXX           X  X                            X           ";//6
-		v[7] =  "X    XXXXXXXXXXXXXXXXXXXXXXXXXX                             X  XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//7
-		v[8] =  "X                                      E                    X  X E                          X           ";//8
-		v[9] =  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX     X  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//9
-		v[10] = "XJ   XXXXX        XXXX                     E          X     X  X                            X           ";//10
-		v[11] = "X                          E      XXXX                X     X  XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//11
-		v[12] = "X                 XXXX                     E                X  X E                          X           ";//12
-		v[13] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//13
-		v[14] = "                                                               X                            X           ";//14
-		v[15] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//15
-		v[16] = "                                                               X E                          X           ";//16
-		v[17] = "                                                               X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//17
-		v[18] = "                                                               X                            X           ";//18
-		v[19] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//19
-		v[20] = "                                                               X E                          X           ";//20
-		v[21] = "                                                               X XXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//21
-		v[22] = "                                                               X                            X           ";//22
-		v[23] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXX X           ";//23
-		v[24] = "                                                               XF      E                    X           ";//24
-		v[25] = "                                                               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX           ";//25
-		v[26] = "                                                                                                        ";//26
-		v[27] = "                                                                                                        ";//27
+		for (int numeroEnemigo = 0; numeroEnemigo < enemigosTotales; numeroEnemigo++) {
+		
+			if (enemigos[numeroEnemigo].X == posX && enemigos[numeroEnemigo].Y == posY) {
+				enemigos[numeroEnemigo].apariencia.imagen = apariencia::IMAGEN_ESPACIO_BLANCO;
+				enemigos[numeroEnemigo].apariencia.color = color::NEGRO;
+				enemigos[numeroEnemigo].apariencia.objeto = objetos::ESPACIO_BLANCO;
+			}
+		}
+
 	}
 
 	// carga el escenario al inicio del programa con el mapa, tambien carga los enemigos y las llaves totales
@@ -169,13 +205,19 @@ namespace accionesJuego {
 					case objetos::LLAVE:
 						llavesTotales++;
 						break;
+					case objetos::JUGADOR: 
+						jugador.X = x;
+						jugador.Y = y;
 					case objetos::ENEMIGO:
 
-						enemigos[enemigosTotales].nombre = "Enemigo";
+						int numeroEnemigo = enemigosTotales;
+
+						enemigos[enemigosTotales].nombre = to_string(numeroEnemigo);
 						enemigos[enemigosTotales].X = x;
 						enemigos[enemigosTotales].Y = y;
 						enemigos[enemigosTotales].apariencia.imagen = apariencia::IMAGEN_ENEMIGO;
 						enemigos[enemigosTotales].apariencia.color = color::ROJO;
+						enemigos[enemigosTotales].apariencia.objeto = objetos::ENEMIGO;
 						
 						enemigosTotales++;
 						break;
@@ -213,13 +255,7 @@ namespace accionesJuego {
 		}
 	}
 
-	void barraCombate() {
-		pantalla::PosicionarXY(9, 20); // cartel en pantalla
-		pantalla::CambiarColor(color::VERDE);
-		printf("combate!");
-	}
-
-	bool controladorEventos(char escenario[FILAS][COLUMNAS]) {
+	bool controladorEventos(char escenario[FILAS][COLUMNAS], Personaje enemigos[12]) {
 		
 		int juegoTerminado = false;
 		char objeto = obtenerObjetoEnEscenario(escenario, jugador.X, jugador.Y);
@@ -231,14 +267,14 @@ namespace accionesJuego {
 			recogerLlave(jugador);
 			break;
 		case objetos::ENEMIGO:
-			barraCombate();
+			tableros::mostrarAlerta("Combate", color::SALMON);
 			jugador.vida--;
+			eliminarEnemigo(enemigos, jugador.X, jugador.Y);
 			limpiarPosicion(escenario, jugador.X, jugador.Y);
+
 			break;
 		case objetos::FINAL_NIVEL:
-			pantalla::CambiarColor(color::AMARILLO);
-			printf("Ganaste");
-			pantalla::CambiarColor(color::BLANCO);
+			tableros::mostrarVictoria();
 			juegoTerminado = true;
 			break;
 		}
