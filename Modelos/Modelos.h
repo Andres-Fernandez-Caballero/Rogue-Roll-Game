@@ -8,6 +8,7 @@
 struct Apariencia {
 	int imagen;
 	int color;
+	char objeto;
 };
 
 struct Personaje {

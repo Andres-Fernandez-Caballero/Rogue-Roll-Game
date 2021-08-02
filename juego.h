@@ -47,17 +47,15 @@ namespace juego {
 			juegoTernimando = true;
 			break;
 		}
-		juegoTernimando = controladorEventos(escenario);
+		juegoTernimando = controladorEventos(escenario, enemigos);
 
 		return juegoTernimando;
 	}
 
-	void IniciarJugador(std::string nombre, int posX, int posY, int imagen, int color) {
+	void IniciarJugador(std::string nombre, int imagen, int color) {
 		int vidaMax = 100;
 
 		jugador.nombre = nombre;
-		jugador.X = posX;
-		jugador.Y = posY;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
 		jugador.llaves = 0;
@@ -69,7 +67,7 @@ namespace juego {
 		
 		pantalla::ocultarCursor(true);
 
-		IniciarJugador("Martin", 1, 10, apariencia::IMAGEN_JUGADOR, color::VERDE);
+		IniciarJugador("Martin", apariencia::IMAGEN_JUGADOR, color::VERDE);
 
 		accionesJuego::cargarEscenario(vecMapa, escenario, enemigos);
 	}
@@ -89,10 +87,9 @@ namespace juego {
 
 		do {
 			PosicionarJugador();
-			
 			juegoTerminado = RefrescarPantalla(escenario);
-			//pantalla::espera(30);
-			//moverEnemigos(enemigos, escenario);
+			moverEnemigos(enemigos, escenario);
+			pantalla::espera(35);
 		} while (!juegoTerminado);
 	}
 }
