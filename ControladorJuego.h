@@ -10,9 +10,6 @@ const int LONG_VEC_MAP = 28;
 const int FILAS = 28;
 const int COLUMNAS = 104;
 
-const int ADELANTE = 1;
-const int ATRAS = -1;
-
 namespace tableros {
 	void mostrarBarraJugador() {
 		pantalla::PosicionarXY(0, 20);
@@ -53,7 +50,6 @@ namespace accionesJuego {
 	int llavesTotales = 0;
 
 	int enemigosTotales = 0;
-	int direccionEnemigo = ADELANTE;
 
 	void nivel_1(string v[LONG_VEC_MAP]) {
 
@@ -156,19 +152,19 @@ namespace accionesJuego {
 			int initX = enemigos[numero].X;
 			int initY = enemigos[numero].Y;
 
-			enemigos[numero].X += direccionEnemigo * 1;
-			enemigos[numero].Y += direccionEnemigo * 0;
+			enemigos[numero].X += enemigos[numero].direccionX * 1;
+			enemigos[numero].Y += enemigos[numero].direccionY * 0;
 
 			// si el personaje no puede avanzar recupera su posicion inicial
 			if (!puedeAvanzar(enemigos[numero], escenario)) {
 				enemigos[numero].X = initX;
 				enemigos[numero].Y = initY;
 
-				if (direccionEnemigo == ADELANTE) {
-					direccionEnemigo = ATRAS;
+				if (enemigos[numero].direccionX == ADELANTE) {
+					enemigos[numero].direccionX = ATRAS;
 				}
 				else {
-					direccionEnemigo = ADELANTE;
+					enemigos[numero].direccionX = ADELANTE;
 				}
 			}
 			else {
@@ -219,6 +215,13 @@ namespace accionesJuego {
 						enemigos[enemigosTotales].apariencia.imagen = apariencia::IMAGEN_ENEMIGO;
 						enemigos[enemigosTotales].apariencia.color = color::ROJO;
 						enemigos[enemigosTotales].apariencia.objeto = objetos::ENEMIGO;
+						
+						int direccion;
+						do {
+							direccion = logica::generarNumeroAleatorio(-1, 1);
+							enemigos[enemigosTotales].direccionX = direccion;
+							enemigos[enemigosTotales].direccionY = 0;
+						} while (direccion == 0);
 						
 						enemigosTotales++;
 						break;

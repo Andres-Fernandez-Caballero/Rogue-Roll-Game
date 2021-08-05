@@ -151,7 +151,7 @@ namespace logica {
 	
 	int generarNumeroAleatorio(int min, int max) {
 		unsigned int seed = (unsigned int)time(0);
-		srand(seed);
+		//srand(seed);
 
 		int random = min + rand() % ((max + 1) - min);
 		return random;
