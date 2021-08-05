@@ -8,7 +8,10 @@
 
 using namespace accionesJuego;
 
+
 namespace juego {
+
+	unsigned long int clock = 0;
 
 	Personaje enemigos[12];
 
@@ -53,12 +56,12 @@ namespace juego {
 	}
 
 	void IniciarJugador(std::string nombre, int imagen, int color) {
-		int vidaMax = 100;
+		int vidaMax = 3;
 
 		jugador.nombre = nombre;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
-		jugador.llaves = 0;
+		//jugador.llaves = 0;
 		jugador.vida = vidaMax;
 	}
 
@@ -76,9 +79,17 @@ namespace juego {
 		mostrarObjetoPantalla(jugador.X, jugador.Y, jugador.apariencia.imagen, jugador.apariencia.color);
 	}
 
+	void MoverEnemigos(Personaje enemigos[12], char escenario[FILAS][COLUMNAS], int velocidadEnemigos) {
+		if (clock % velocidadEnemigos == 0) {
+			accionesJuego::moverEnemigos(enemigos, escenario);
+		}
+	}
+
 	void Jugar() {
 		string vecMapa[LONG_VEC_MAP];
 		char escenario[FILAS][COLUMNAS];
+
+		int velocidadEnemigos = 2000; //miliseg
 
 		CargarRecursos(vecMapa, escenario);
 
@@ -88,8 +99,8 @@ namespace juego {
 		do {
 			PosicionarJugador();
 			juegoTerminado = RefrescarPantalla(escenario);
-			moverEnemigos(enemigos, escenario);
-			pantalla::espera(35);
+			MoverEnemigos(enemigos, escenario, velocidadEnemigos);
+			clock++;
 		} while (!juegoTerminado);
 	}
 }
