@@ -8,7 +8,10 @@
 
 using namespace accionesJuego;
 
+
 namespace juego {
+
+	unsigned long int clock = 0;
 
 	Personaje enemigos[12];
 
@@ -43,27 +46,25 @@ namespace juego {
 		case teclado::TECLA_DOWN:
 			MoverJugador(0, 1, escenario);
 			break;
-		default:
+		case teclado::TECLA_ESC:
 			juegoTernimando = true;
 			break;
 		}
-		juegoTernimando = controladorEventos(escenario, enemigos);
 
 		return juegoTernimando;
 	}
 
 	void IniciarJugador(std::string nombre, int imagen, int color) {
-		int vidaMax = 100;
+		int vidaMax = 3;
 
 		jugador.nombre = nombre;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
-		jugador.llaves = 0;
 		jugador.vida = vidaMax;
 	}
 
 	void CargarRecursos(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
-		accionesJuego::Nivel1(vecMapa);
+		accionesJuego::nivel_1(vecMapa);
 		
 		pantalla::ocultarCursor(true);
 
@@ -76,21 +77,41 @@ namespace juego {
 		mostrarObjetoPantalla(jugador.X, jugador.Y, jugador.apariencia.imagen, jugador.apariencia.color);
 	}
 
+	void MoverEnemigos(Personaje enemigos[12], char escenario[FILAS][COLUMNAS], int velocidadEnemigos) {
+		if (clock % velocidadEnemigos == 0) {
+			accionesJuego::moverEnemigos(enemigos, escenario);
+		}
+	}
+
 	void Jugar() {
 		string vecMapa[LONG_VEC_MAP];
 		char escenario[FILAS][COLUMNAS];
 
+		int velocidadEnemigos = 2000; //miliseg
+
 		CargarRecursos(vecMapa, escenario);
 
+		bool teclaEscOprimida = false;
 		bool juegoTerminado = false;
 		accionesJuego::DibujarEscenario(escenario);
 
 		do {
 			PosicionarJugador();
-			juegoTerminado = RefrescarPantalla(escenario);
-			moverEnemigos(enemigos, escenario);
-			pantalla::espera(35);
-		} while (!juegoTerminado);
+			MoverEnemigos(enemigos, escenario, velocidadEnemigos);
+			teclaEscOprimida = RefrescarPantalla(escenario);
+			juegoTerminado = controladorEventos(escenario, enemigos);
+			clock++;
+		} while (!teclaEscOprimida && !juegoTerminado);
+
+		if (juegoTerminado && jugador.vida <= 0) {
+			tableros::mostrarDerrota();
+		}
+		else if (teclaEscOprimida) {
+			tableros::mostrarSalidaDelJuego();
+		}
+		else {
+			tableros::mostrarVictoria();
+		}
 	}
 }
 #endif // !JUEGO_H
