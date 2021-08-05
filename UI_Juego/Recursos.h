@@ -22,8 +22,10 @@ namespace apariencia {
 
 namespace objetos {
 
-	const char LLAVE = 'K';
-	const char PUERTA = 'P';
+	const char LLAVE_1 = 'K';
+	const char LLAVE_2 = 'L';
+	const char PUERTA_1 = 'P';
+	const char PUERTA_2 = 'Q';
 	const char MURO = 'X';
 	const char JUGADOR = 'J';
 	const char ENEMIGO = 'E';

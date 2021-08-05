@@ -46,11 +46,10 @@ namespace juego {
 		case teclado::TECLA_DOWN:
 			MoverJugador(0, 1, escenario);
 			break;
-		default:
+		case teclado::TECLA_ESC:
 			juegoTernimando = true;
 			break;
 		}
-		juegoTernimando = controladorEventos(escenario, enemigos);
 
 		return juegoTernimando;
 	}
@@ -92,15 +91,27 @@ namespace juego {
 
 		CargarRecursos(vecMapa, escenario);
 
+		bool teclaEscOprimida = false;
 		bool juegoTerminado = false;
 		accionesJuego::DibujarEscenario(escenario);
 
 		do {
 			PosicionarJugador();
-			juegoTerminado = RefrescarPantalla(escenario);
 			MoverEnemigos(enemigos, escenario, velocidadEnemigos);
+			teclaEscOprimida = RefrescarPantalla(escenario);
+			juegoTerminado = controladorEventos(escenario, enemigos);
 			clock++;
-		} while (!juegoTerminado);
+		} while (!teclaEscOprimida && !juegoTerminado);
+
+		if (juegoTerminado && jugador.vida <= 0) {
+			tableros::mostrarDerrota();
+		}
+		else if (teclaEscOprimida) {
+			tableros::mostrarSalidaDelJuego();
+		}
+		else {
+			tableros::mostrarVictoria();
+		}
 	}
 }
 #endif // !JUEGO_H

@@ -20,14 +20,10 @@ struct Personaje {
 	int X;
 	int Y;
 	Apariencia apariencia;
-	int llaves;
 	int direccionX; //ADELANTE = 1 | ATRAS = -1
 	int direccionY; //ADELANTE = 1 | ATRAS = -1
 } jugador; //variable global
 
-void recogerLlave(Personaje& personaje) {
-	personaje.llaves++;
-}
 
 #endif // !MODELS_H
 
