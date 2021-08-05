@@ -61,12 +61,11 @@ namespace juego {
 		jugador.nombre = nombre;
 		jugador.apariencia.imagen = imagen;
 		jugador.apariencia.color = color;
-		//jugador.llaves = 0;
 		jugador.vida = vidaMax;
 	}
 
 	void CargarRecursos(string vecMapa[LONG_VEC_MAP], char escenario[FILAS][COLUMNAS]) {
-		accionesJuego::Nivel1(vecMapa);
+		accionesJuego::nivel_1(vecMapa);
 		
 		pantalla::ocultarCursor(true);
 

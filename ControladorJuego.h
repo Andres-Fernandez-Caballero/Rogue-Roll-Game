@@ -55,7 +55,7 @@ namespace accionesJuego {
 	int enemigosTotales = 0;
 	int direccionEnemigo = ADELANTE;
 
-	void Nivel1(string v[LONG_VEC_MAP]) {
+	void nivel_1(string v[LONG_VEC_MAP]) {
 
 		//******0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111****//x
 		//******0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000****//x
@@ -208,6 +208,7 @@ namespace accionesJuego {
 					case objetos::JUGADOR: 
 						jugador.X = x;
 						jugador.Y = y;
+						break;
 					case objetos::ENEMIGO:
 
 						int numeroEnemigo = enemigosTotales;
