@@ -1,0 +1,10 @@
+{
+    "image": "mcr.microsoft.com/vscode/devcontainers/cpp:debian-11",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack"
+            ]
+        }
+    }
+}

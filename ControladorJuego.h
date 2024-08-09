@@ -2,7 +2,7 @@
 #ifndef CONTROLADOR_JUEGO_H
 #define CONTROLADOR_JUEGO_H
 
-#include "UI_Juego/Recursos.h"
+#include "UI/Recursos.h"
 #include "Modelos/Modelos.h"
 #include<string>
 
@@ -24,7 +24,7 @@ namespace tableros {
 		printf("--------------------------\n");
 	}
 
-	void mostrarAlerta(std::string mensaje, int color) {
+	void mostrarAlerta(std::string mensaje, string color) {
 		pantalla::PosicionarXY(9, 20); // cartel en pantalla
 		pantalla::CambiarColor(color);
 		cout << mensaje;
@@ -118,7 +118,7 @@ namespace accionesJuego {
 		escenario[posY][posX] = objeto;
 	}
 
-	void mostrarObjetoPantalla(int posX, int posY, int imagen, int color) {
+	void mostrarObjetoPantalla(int posX, int posY, int imagen, string color) {
 		pantalla::PosicionarXY(posX, posY);
 		pantalla::CambiarColor(color);
 		printf("%c", imagen);

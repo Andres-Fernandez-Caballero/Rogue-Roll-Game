@@ -7,7 +7,7 @@
 
 struct Apariencia {
 	int imagen;
-	int color;
+	std::string color;
 	char objeto;
 };
 

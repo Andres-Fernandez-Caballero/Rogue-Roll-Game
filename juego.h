@@ -2,7 +2,7 @@
 #ifndef JUEGO_H
 #define JUEGO_H
 
-#include "UI_Juego/Recursos.h"
+#include "UI/Recursos.h"
 #include "ControladorJuego.h"
 #include "Modelos/Modelos.h"
 
@@ -54,7 +54,7 @@ namespace juego {
 		return juegoTernimando;
 	}
 
-	void IniciarJugador(std::string nombre, int imagen, int color) {
+	void IniciarJugador(std::string nombre, int imagen, string color) {
 		int vidaMax = 3;
 
 		jugador.nombre = nombre;

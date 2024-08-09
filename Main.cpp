@@ -4,5 +4,5 @@
 using namespace juego;
 
 int main() {
-	Jugar();
+    Jugar();
 }
